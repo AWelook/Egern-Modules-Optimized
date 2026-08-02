@@ -213,5 +213,32 @@
     "upstream_sha256": "10d5def71188af07d745ce5a84b81ff5d77d7ead67258653611f9f1d228b92c8",
     "warnings": [],
     "conversion_notes": []
+  },
+  {
+    "slug": "netease",
+    "category": "music",
+    "upstream_url": "https://raw.githubusercontent.com/Yu9191/NeteasemusicAd/main/wyy.sgmodule",
+    "upstream_path": "upstream/music/netease/wyy.sgmodule",
+    "normalization_url": null,
+    "normalization_path": null,
+    "converted_path": "converted/music/netease/unoptimized.yaml",
+    "published_path": "modules/music/netease.yaml",
+    "scripts": [
+      {
+        "upstream_url": "https://raw.githubusercontent.com/Yu9191/NeteasemusicAd/main/wyyad.js",
+        "upstream_path": "upstream/music/netease/wyyad.js",
+        "published_path": "scripts/music/netease/wyyad.js",
+        "runtime": "egern-native",
+        "sha256": "7423635e7826d083bb41e147b921eb66c04ab538f01a123e82b6a18034c38571"
+      }
+    ],
+    "dependencies": [],
+    "status": "published",
+    "upstream_sha256": "1ab2d016ad51e9a995aadacde3c2502b110674bf10c9674896aab9f5df13ef40",
+    "warnings": [],
+    "conversion_notes": [
+      "Surge 的 REJECT-NO-DROP 在 Egern 中使用原生 REJECT",
+      "九个 Surge 脚本注册合并为一个精确匹配的 Egern 二进制响应脚本"
+    ]
   }
 ]

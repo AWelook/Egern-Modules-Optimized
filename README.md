@@ -51,8 +51,9 @@ egern:/modules/new?url=https://raw.githubusercontent.com/AWelook/Egern-Modules-O
 | 微博轻享版 | `modules/ad/weibo-intl-ads.yaml` |
 | 小红书 | `modules/ad/xiaohongshu-ads.yaml` |
 | 去广告合集 | `modules/ad/ad-combined.yaml` |
+| 网易云音乐 | `modules/music/netease.yaml` |
 
-合集成员与 Surge 仓库一致，不含 Spotify 和网易云。不要同时启用合集与其中的单独模块。
+合集成员与 Surge 仓库一致，不含 Spotify 和网易云；网易云作为独立模块发布。不要同时启用合集与其中的单独模块。
 
 ## 优化边界
 
