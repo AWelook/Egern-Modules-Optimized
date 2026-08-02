@@ -1,0 +1,15 @@
+{
+  "name": "egern-modules-optimized",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "import": "node tools/import-module.mjs",
+    "sync": "node tools/sync-upstreams.mjs",
+    "validate": "node tools/validate.mjs",
+    "test": "node --test && npm run validate"
+  },
+  "dependencies": {
+    "yaml": "^2.8.1"
+  }
+}

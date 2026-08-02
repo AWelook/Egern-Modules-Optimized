@@ -1,0 +1,47 @@
+name: Check upstream updates
+
+on:
+  schedule:
+    - cron: "17 20 */2 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - id: sync
+        run: npm run sync
+      - name: Commit updated snapshots
+        if: steps.sync.outputs.changed != '[]'
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add registry.json upstream
+          git commit -m "chore: refresh upstream snapshots"
+          git push
+      - name: Open optimization issues
+        if: steps.sync.outputs.changed != '[]'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CHANGED: ${{ steps.sync.outputs.changed }}
+        run: |
+          gh label create upstream-update --color FBCA04 --description "Upstream changed and needs review" --force
+          node --input-type=module -e '
+            import { execFileSync } from "node:child_process";
+            for (const item of JSON.parse(process.env.CHANGED)) {
+              const query = `repo:${process.env.GITHUB_REPOSITORY} is:issue is:open label:upstream-update in:title ${item.category}/${item.slug}`;
+              const found = execFileSync("gh", ["issue", "list", "--search", query, "--json", "number"], { encoding: "utf8" });
+              if (JSON.parse(found).length) continue;
+              execFileSync("gh", ["issue", "create", "--title", `Upstream update: ${item.category}/${item.slug}`, "--label", "upstream-update", "--body", `Upstream changed from ${item.old_sha256} to ${item.new_sha256}. Follow AGENTS.md before publishing.`], { stdio: "inherit" });
+            }
+          '

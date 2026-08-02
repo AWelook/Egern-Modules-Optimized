@@ -1,0 +1,64 @@
+name: Import upstream module
+
+on:
+  workflow_dispatch:
+    inputs:
+      upstream_url:
+        description: Original upstream URL
+        required: true
+        type: string
+      converted_url:
+        description: Optional Script Hub Surge conversion URL
+        required: false
+        type: string
+      category:
+        description: Category
+        required: true
+        default: ad
+        type: string
+      slug:
+        description: Stable project slug
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Save upstream and unoptimized conversion
+        env:
+          UPSTREAM_URL: ${{ inputs.upstream_url }}
+          CONVERTED_URL: ${{ inputs.converted_url }}
+          CATEGORY: ${{ inputs.category }}
+          SLUG: ${{ inputs.slug }}
+        run: |
+          args=(--url "$UPSTREAM_URL" --category "$CATEGORY" --slug "$SLUG")
+          if [ -n "$CONVERTED_URL" ]; then args+=(--converted-url "$CONVERTED_URL"); fi
+          npm run import -- "${args[@]}"
+          npm test
+      - name: Commit snapshots
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add registry.json upstream converted
+          git commit -m "chore: import ${{ inputs.category }}/${{ inputs.slug }}"
+          git push
+      - name: Create optimization task
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create conversion-required --color D93F0B --description "Needs Egern-native conversion" --force
+          gh issue create \
+            --title "Optimize ${{ inputs.category }}/${{ inputs.slug }} for Egern" \
+            --label conversion-required \
+            --body "Upstream and unoptimized conversion snapshots are saved. Convert every referenced script to the native Egern ctx API, preserve behavior and parameters, add tests, then publish the YAML module."
