@@ -259,5 +259,39 @@
       "九个 Surge 脚本注册合并为一个精确匹配的 Egern 二进制响应脚本"
     ],
     "published_sha256": "a12038cb0071775ead5cfbef92fd3feaa20bd9e90a530a74430a6a0b2c93b8cb"
+  },
+  {
+    "slug": "wloc",
+    "category": "tools",
+    "upstream_url": "https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/main/modules/wloc.sgmodule",
+    "normalization_url": null,
+    "normalization_path": null,
+    "normalization_sha256": null,
+    "upstream_path": "upstream/tools/wloc/source.sgmodule",
+    "converted_path": "converted/tools/wloc/unoptimized.yaml",
+    "published_path": null,
+    "scripts": [
+      {
+        "upstream_url": "https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/main/dist/wloc.js",
+        "upstream_path": "upstream/tools/wloc/wloc.js",
+        "published_path": null,
+        "runtime": "needs-port",
+        "sha256": "d385c624efd59bdd2cff56bf819a770b40c4abf0f970818877f1dca4174f256a"
+      },
+      {
+        "upstream_url": "https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/main/dist/wloc-settings.js",
+        "upstream_path": "upstream/tools/wloc/wloc-settings.js",
+        "published_path": null,
+        "runtime": "needs-port",
+        "sha256": "b4e9d69e69c703b3fab485a559825aaedc9e3a1fd9c06e81cb35d10bbdcd13d2"
+      }
+    ],
+    "status": "needs-optimization",
+    "upstream_sha256": "5d6b82c31316f4a7be65e3b8d2335f4338e01af98e262948118eefe63abf7034",
+    "warnings": [],
+    "conversion_notes": [
+      "模块已转换为 Egern YAML，并通过 env._compat.$argument 保留 Surge 脚本参数",
+      "两个 JavaScript 保持原作者兼容版本和原始远程地址，未标记为 Egern 原生发布脚本"
+    ]
   }
 ]

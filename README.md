@@ -36,6 +36,14 @@ egern:/modules/new?url=https://raw.githubusercontent.com/AWelook/Egern-Modules-O
 
 不要同时启用去广告合集与其中的单独模块，否则相同请求可能被重复匹配。合集不包含 Spotify 和网易云音乐。
 
+### 原生格式转换（兼容脚本）
+
+| 模块 | 安装文件 | 说明 |
+| --- | --- | --- |
+| Apple WLOC 定位修改 | [Raw](https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/converted/tools/wloc/unoptimized.yaml) | Egern YAML；两个 JS 保持原作者兼容版本 |
+
+WLOC 只转换模块格式，不改动或重新托管 JavaScript。模块使用 Egern 官方 `_compat.$argument` 兼容环境保留经度、纬度、精度和日志级别参数。由于脚本不是 `ctx` 原生实现，该模块保存在 `converted/`，不计入上方的全原生发布模块。
+
 ## 项目保证
 
 - 发布模块使用 Egern YAML；发布脚本使用 `export default async function (ctx)` 原生接口。

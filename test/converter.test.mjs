@@ -46,6 +46,18 @@ x = type=http-response,pattern=^https:\\/\\/example\\.com,script-path=https://ex
   assert.equal(scripting.binary_body, true);
 });
 
+test("preserves Surge script arguments for compatibility scripts", () => {
+  const input = `#!name=X
+#!arguments=经度:113.9,纬度:22.5
+[Script]
+x = type=http-response,pattern=^https:\\/\\/example\\.com,script-path=https://example.com/x.js,argument=longitude={{{经度}}}&latitude={{{纬度}}}
+`;
+  const scripting = convertSurgeModule(input).document.scriptings[0].http_response;
+  assert.deepEqual(scripting.env, {
+    "_compat.$argument": "longitude={{{经度}}}&latitude={{{纬度}}}",
+  });
+});
+
 test("reports unsupported input instead of silently dropping it", () => {
   const result = convertSurgeModule("#!name=X\n[Body Rewrite]\nunsupported thing");
   assert.deepEqual(result.warnings, ["未转换 Body Rewrite: unsupported thing"]);

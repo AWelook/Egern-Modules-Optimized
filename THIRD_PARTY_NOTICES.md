@@ -12,5 +12,6 @@
 | 微博轻享版 | kokoryh；QingRex 汇总 | [LoonKissSurge](https://github.com/QingRex/LoonKissSurge) | 未声明（NOASSERTION） |
 | 小红书 | RuCu6、fmz200；QingRex 汇总 | [LoonKissSurge](https://github.com/QingRex/LoonKissSurge) | 未声明（NOASSERTION） |
 | 网易云音乐 | Yu9191 | [NeteasemusicAd](https://github.com/Yu9191/NeteasemusicAd) | MIT |
+| Apple WLOC 定位修改 | Yu9191 Rewrite | [wloc](https://github.com/Yu9191/wloc) | 未声明（NOASSERTION） |
 
 准确的逐文件来源保存在 `registry.json`，未经修改的内容保存在 `upstream/`。如果上游补充或变更许可证，应以其最新声明为准，并同步更新本文件。
