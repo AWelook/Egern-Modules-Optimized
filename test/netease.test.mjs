@@ -21,6 +21,14 @@ test("Netease module preserves all parameters and binary settings", () => {
   assert.equal(Object.keys(scripting.env).length, 25);
 });
 
+test("Netease preserves REJECT-NO-DROP semantics", () => {
+  assert.equal(moduleDocument.rules.length, 5);
+  assert.deepEqual(
+    moduleDocument.rules.map((rule) => Object.values(rule)[0].policy),
+    Array(5).fill("REJECT-NO-DROP"),
+  );
+});
+
 test("Netease combined matcher covers every optimized handler", () => {
   const matcher = new RegExp(moduleDocument.scriptings[0].http_response.match, "u");
   for (const route of [

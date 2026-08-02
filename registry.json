@@ -237,7 +237,7 @@
     "upstream_sha256": "1ab2d016ad51e9a995aadacde3c2502b110674bf10c9674896aab9f5df13ef40",
     "warnings": [],
     "conversion_notes": [
-      "Surge 的 REJECT-NO-DROP 在 Egern 中使用原生 REJECT",
+      "保留上游 REJECT-NO-DROP 策略，避免改变拒绝连接语义",
       "九个 Surge 脚本注册合并为一个精确匹配的 Egern 二进制响应脚本"
     ]
   }

@@ -70,7 +70,7 @@ const record = {
   upstream_sha256: sha256(originalModule),
   warnings: [],
   conversion_notes: [
-    "Surge 的 REJECT-NO-DROP 在 Egern 中使用原生 REJECT",
+    "保留上游 REJECT-NO-DROP 策略，避免改变拒绝连接语义",
     "九个 Surge 脚本注册合并为一个精确匹配的 Egern 二进制响应脚本",
   ],
 };
@@ -88,10 +88,6 @@ function normalizeNeteaseDocument(document, optimized) {
     : document.description;
   document.homepage = "https://github.com/AWelook/Egern-Modules-Optimized";
   document.compat_arguments_desc = document.compat_arguments_desc?.trimStart();
-  for (const rule of document.rules ?? []) {
-    const body = Object.values(rule)[0];
-    if (body.policy === "REJECT-NO-DROP") body.policy = "REJECT";
-  }
   const env = {
     FX: "{{{发现}}}", MY: "{{{漫游}}}", DT: "{{{笔记}}}", GZ: "{{{关注}}}", SOU: "{{{搜索}}}",
     SY_NAME: "{{{首页自定义名称}}}", WD_NAME: "{{{我的自定义名称}}}", MY_NAME: "{{{漫游自定义名称}}}",

@@ -38,19 +38,19 @@ compat_arguments_desc: |-
 rules:
   - domain:
       match: iadmusicmat.music.126.net
-      policy: REJECT
+      policy: REJECT-NO-DROP
   - domain:
       match: iadmat.nosdn.127.net
-      policy: REJECT
+      policy: REJECT-NO-DROP
   - domain:
       match: iadmatapk.nosdn.127.net
-      policy: REJECT
+      policy: REJECT-NO-DROP
   - domain:
       match: httpdns.n.netease.com
-      policy: REJECT
+      policy: REJECT-NO-DROP
   - domain:
       match: httpdns.music.163.com
-      policy: REJECT
+      policy: REJECT-NO-DROP
 map_locals:
   - match: ^https?:\/\/(?:ipv4|interface\d?)\.music\.163\.com\/x?e?api\/ad
     status_code: 200
