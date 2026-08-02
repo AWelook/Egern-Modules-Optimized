@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "crypto-js": "^4.2.0",
-    "pako": "^2.1.0",
+    "pako": "^3.0.1",
     "yaml": "^2.8.1"
   },
   "devDependencies": {
