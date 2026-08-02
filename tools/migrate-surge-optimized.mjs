@@ -1,4 +1,5 @@
 import { cp, mkdir, readFile, writeFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
 import path from "node:path";
 import YAML from "yaml";
 import { convertSurgeModule } from "./convert-surge-module.mjs";
@@ -134,8 +135,16 @@ for (const source of surgeRegistry) {
   });
 }
 
-records.sort((a, b) => `${a.category}/${a.slug}`.localeCompare(`${b.category}/${b.slug}`));
-await writeFile(path.join(root, "registry.json"), `${JSON.stringify(records, null, 2)}\n`);
+const registryPath = path.join(root, "registry.json");
+const existingRegistry = JSON.parse(await readFile(registryPath, "utf8").catch(() => "[]"));
+const migratedKeys = new Set(records.map((item) => `${item.category}/${item.slug}`));
+const mergedRecords = [
+  ...existingRegistry.filter((item) => !migratedKeys.has(`${item.category}/${item.slug}`)),
+  ...records,
+];
+mergedRecords.sort((a, b) => `${a.category}/${a.slug}`.localeCompare(`${b.category}/${b.slug}`));
+await writeFile(registryPath, `${JSON.stringify(mergedRecords, null, 2)}\n`);
+execFileSync(process.execPath, [path.join(root, "tools", "update-integrity.mjs")], { stdio: "inherit" });
 console.log(`已迁移 ${records.length} 个优化模块`);
 
 function applyRedditTranslation(document) {

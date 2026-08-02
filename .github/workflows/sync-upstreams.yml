@@ -2,46 +2,68 @@ name: Check upstream updates
 
 on:
   schedule:
-    - cron: "17 20 */2 * *"
+    - cron: "17 20 * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
   issues: write
+  pull-requests: write
+
+concurrency:
+  group: repository-writes
+  cancel-in-progress: false
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 24
           cache: npm
-      - run: npm ci
+      - name: Keep an exact 48-hour cadence
+        id: cadence
+        run: |
+          if [ "${{ github.event_name }}" = workflow_dispatch ] || [ $(( $(date -u +%s) / 86400 % 2 )) -eq 0 ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.cadence.outputs.run == 'true'
+        run: npm ci
       - id: sync
+        if: steps.cadence.outputs.run == 'true'
         run: npm run sync
-      - name: Commit updated snapshots
-        if: steps.sync.outputs.changed != '[]'
+      - name: Validate successful snapshot changes
+        if: steps.cadence.outputs.run == 'true' && steps.sync.outputs.changed != '[]'
+        run: npm test
+      - name: Publish updated snapshots through a validated pull request
+        if: steps.cadence.outputs.run == 'true' && steps.sync.outputs.changed != '[]'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          branch="automation/upstream-sync-${GITHUB_RUN_ID}"
+          git switch -c "$branch"
           git add registry.json upstream
           git commit -m "chore: refresh upstream snapshots"
-          git push
-      - name: Open optimization issues
-        if: steps.sync.outputs.changed != '[]'
+          git push -u origin "$branch"
+          pr_url=$(gh pr create --base main --head "$branch" --title "chore: refresh upstream snapshots" --body "Refresh changed upstream snapshots. Optimization queue issues are created only after this pull request passes validation and merges.")
+          gh pr merge "$pr_url" --auto --squash --delete-branch
+          for attempt in {1..60}; do
+            state=$(gh pr view "$pr_url" --json state --jq .state)
+            if [ "$state" = MERGED ]; then break; fi
+            sleep 5
+          done
+          test "$(gh pr view "$pr_url" --json state --jq .state)" = MERGED
+      - name: Open grouped review issues
+        if: steps.cadence.outputs.run == 'true' && (steps.sync.outputs.changed != '[]' || steps.sync.outputs.failed != '[]')
         env:
           GH_TOKEN: ${{ github.token }}
           CHANGED: ${{ steps.sync.outputs.changed }}
+          FAILED: ${{ steps.sync.outputs.failed }}
         run: |
-          gh label create upstream-update --color FBCA04 --description "Upstream changed and needs review" --force
-          node --input-type=module -e '
-            import { execFileSync } from "node:child_process";
-            for (const item of JSON.parse(process.env.CHANGED)) {
-              const query = `repo:${process.env.GITHUB_REPOSITORY} is:issue is:open label:upstream-update in:title ${item.category}/${item.slug}`;
-              const found = execFileSync("gh", ["issue", "list", "--search", query, "--json", "number"], { encoding: "utf8" });
-              if (JSON.parse(found).length) continue;
-              execFileSync("gh", ["issue", "create", "--title", `Upstream update: ${item.category}/${item.slug}`, "--label", "upstream-update", "--body", `Upstream changed from ${item.old_sha256} to ${item.new_sha256}. Follow AGENTS.md before publishing.`], { stdio: "inherit" });
-            }
-          '
+          node tools/create-sync-issues.mjs

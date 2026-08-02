@@ -9,6 +9,10 @@ const moduleDocument = YAML.parse(await readFile(
   new URL("../modules/music/netease.yaml", import.meta.url),
   "utf8",
 ));
+const flowFixture = JSON.parse(await readFile(
+  new URL("../fixtures/netease/flow.synthetic.json", import.meta.url),
+  "utf8",
+)).payload;
 
 test("Netease module preserves all parameters and binary settings", () => {
   assert.equal(Object.keys(moduleDocument.compat_arguments).length, 28);
@@ -54,7 +58,7 @@ test("Netease combined matcher covers every optimized handler", () => {
 test("Netease native entry returns byte-compatible AES output", async () => {
   const result = await netease(context(
     "https://interface.music.163.com/api/sp/flow/popup/query",
-    { data: { advertisement: true } },
+    flowFixture,
   ));
   assert.ok(result.body instanceof Uint8Array);
   assert.deepEqual(decodeBody(result.body, true), { data: {} });

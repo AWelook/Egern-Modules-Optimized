@@ -4,7 +4,7 @@
 
 ## 上游优化队列
 
-1. 查找带 `upstream-update` 标签的开放 Issue，按创建时间从旧到新一次处理一个。
+1. 查找带 `optimization-queue` 标签的开放 Issue，按创建时间从旧到新一次处理一个。`upstream-update`、`conversion-required` 和 `upstream-fetch-failed` 是原因标签，不是独立队列。
 2. 拉取最新 `main`，读取 `registry.json`，确认原始来源、非 Surge 转换来源、上游脚本、转换快照和发布文件。
 3. 拉取新上游，但不得覆盖旧版本之前就开始分析；用 Git 历史比较旧上游、新上游与当前发布版。
 4. 来源不是 Egern 或 Surge 模块时，先用 Script Hub 转为 Surge，再生成并保存未经优化的 Egern 转换快照。

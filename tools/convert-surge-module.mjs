@@ -1,6 +1,7 @@
 import YAML from "yaml";
 import {
   activeLines,
+  parseBoolean,
   parseMetadata,
   splitCommaFields,
   splitSections,
@@ -191,8 +192,8 @@ function convertScripts(lines, output, warnings, scriptUrlMap) {
     if (values["update-interval"]) body.update_interval = Number(values["update-interval"]);
     if (values["max-size"] !== undefined) body.max_size = Number(values["max-size"]);
     if (values.timeout !== undefined) body.timeout = Number(values.timeout);
-    if (values["requires-body"] !== undefined) body.body_required = values["requires-body"] === "true";
-    if (values["binary-body-mode"] !== undefined) body.binary_body = values["binary-body-mode"] === "true";
+    if (values["requires-body"] !== undefined) body.body_required = parseBoolean(values["requires-body"]);
+    if (values["binary-body-mode"] !== undefined) body.binary_body = parseBoolean(values["binary-body-mode"]);
     add(output, "scriptings", { [type]: body });
   }
 }

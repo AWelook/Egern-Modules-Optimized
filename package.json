@@ -6,13 +6,17 @@
   "scripts": {
     "build:combined": "node tools/build-combined-module.mjs",
     "build:netease": "node tools/build-netease.mjs",
+    "benchmark:check": "node --expose-gc tools/benchmark.mjs",
     "check:combined": "node tools/build-combined-module.mjs --check",
     "import": "node tools/import-module.mjs",
+    "integrity:update": "node tools/update-integrity.mjs",
+    "integrity:check": "node tools/update-integrity.mjs --check",
     "migrate:surge": "node tools/migrate-surge-optimized.mjs",
     "migrate:netease": "node tools/migrate-netease.mjs",
     "sync": "node tools/sync-upstreams.mjs",
     "validate": "node tools/validate.mjs",
-    "test": "npm run build:netease && node --test && npm run check:combined && npm run validate"
+    "verify:raw": "node tools/verify-raw.mjs",
+    "test": "npm run build:netease && node --test && npm run benchmark:check && npm run check:combined && npm run integrity:check && npm run validate"
   },
   "dependencies": {
     "crypto-js": "^4.2.0",

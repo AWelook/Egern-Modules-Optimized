@@ -24,13 +24,18 @@ on:
 permissions:
   contents: write
   issues: write
+  pull-requests: write
+
+concurrency:
+  group: repository-writes
+  cancel-in-progress: false
 
 jobs:
   import:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 24
           cache: npm
@@ -46,19 +51,40 @@ jobs:
           if [ -n "$CONVERTED_URL" ]; then args+=(--converted-url "$CONVERTED_URL"); fi
           npm run import -- "${args[@]}"
           npm test
-      - name: Commit snapshots
-        run: |
-          git config user.name github-actions[bot]
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add registry.json upstream converted
-          git commit -m "chore: import ${{ inputs.category }}/${{ inputs.slug }}"
-          git push
-      - name: Create optimization task
+      - name: Publish snapshots through a validated pull request
+        id: publish
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          branch="automation/import-${GITHUB_RUN_ID}"
+          git switch -c "$branch"
+          git add registry.json upstream converted
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          git commit -m "chore: import ${{ inputs.category }}/${{ inputs.slug }}"
+          git push -u origin "$branch"
+          pr_url=$(gh pr create --base main --head "$branch" --title "chore: import ${{ inputs.category }}/${{ inputs.slug }}" --body "Save the upstream source and unoptimized Egern conversion, then create an optimization queue task after validation.")
+          gh pr merge "$pr_url" --auto --squash --delete-branch
+          for attempt in {1..60}; do
+            state=$(gh pr view "$pr_url" --json state --jq .state)
+            if [ "$state" = MERGED ]; then break; fi
+            sleep 5
+          done
+          test "$(gh pr view "$pr_url" --json state --jq .state)" = MERGED
+      - name: Create optimization task
+        if: steps.publish.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create optimization-queue --color 0E8A16 --description "Awaiting optimization or source review" --force
           gh label create conversion-required --color D93F0B --description "Needs Egern-native conversion" --force
+          gh label create upstream-update --color FBCA04 --description "Upstream changed and needs review" --force
           gh issue create \
             --title "Optimize ${{ inputs.category }}/${{ inputs.slug }} for Egern" \
-            --label conversion-required \
+            --label optimization-queue,conversion-required,upstream-update \
             --body "Upstream and unoptimized conversion snapshots are saved. Convert every referenced script to the native Egern ctx API, preserve behavior and parameters, add tests, then publish the YAML module."

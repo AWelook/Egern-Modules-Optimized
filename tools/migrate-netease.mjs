@@ -79,6 +79,7 @@ if (index >= 0) registry[index] = record;
 else registry.push(record);
 registry.sort((a, b) => `${a.category}/${a.slug}`.localeCompare(`${b.category}/${b.slug}`));
 await writeFile(registryPath, `${JSON.stringify(registry, null, 2)}\n`);
+execFileSync(process.execPath, [path.join(root, "tools", "update-integrity.mjs")], { stdio: "inherit" });
 console.log("已迁移网易云音乐优化模块");
 
 function normalizeNeteaseDocument(document, optimized) {

@@ -1,0 +1,13 @@
+{
+  "fixture": {
+    "source": "synthetic",
+    "route": "/api/sp/flow/popup/query",
+    "encrypted": false,
+    "contains_private_data": false
+  },
+  "payload": {
+    "data": {
+      "advertisement": true
+    }
+  }
+}

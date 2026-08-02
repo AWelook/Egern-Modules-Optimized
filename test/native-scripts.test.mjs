@@ -14,6 +14,10 @@ const legacyXiaohongshu = await readFile(
   new URL("../upstream/ad/xiaohongshu-ads/RedPaper_remove_ads.js", import.meta.url),
   "utf8",
 );
+const xiaohongshuHomefeedFixture = JSON.parse(await readFile(
+  new URL("../fixtures/xiaohongshu/homefeed.synthetic.json", import.meta.url),
+  "utf8",
+)).payload;
 
 test("12306 returns the same placement-specific payloads", async () => {
   for (const [placementNo, expected] of [
@@ -94,12 +98,7 @@ test("Reddit translation keeps the original parameter switch semantics", async (
 test("Xiaohongshu filters homefeed items without changing retained notes", async () => {
   const result = await xiaohongshu(responseContext({
     url: "https://edith.xiaohongshu.com/api/sns/v6/homefeed?x=1",
-    json: { data: [
-      { id: "live", model_type: "live_v2" },
-      { id: "ad", ads_info: {} },
-      { id: "goods", note_attributes: [] },
-      { id: "keep", related_ques: [1] },
-    ] },
+    json: xiaohongshuHomefeedFixture,
   }));
   assert.deepEqual(JSON.parse(result.body).data, [{ id: "keep" }]);
 });
