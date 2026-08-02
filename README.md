@@ -9,8 +9,12 @@
 - `modules/<category>/<slug>.yaml`：审核、优化并测试后的 Egern 模块。
 - `scripts/<category>/<slug>/`：使用 `export default async function (ctx)` 的 Egern 原生脚本。
 - `registry.json`：上游、快照、发布文件和状态登记。
+- `benchmarks/`：大响应体性能回归预算；只用于发现明显回退，不替代 Egern 真机测量。
+- `fixtures/`：脱敏行为样本规范。
 
 转换快照不等于发布版。存在远程脚本时，导入器只保存上游和转换快照；脚本完成 Egern 原生迁移、行为测试和内存审查后，才允许把模块写入 `modules/`。
+
+GitHub 自动化使用统一的 `optimization-queue` 队列标签；`conversion-required`、`upstream-update` 与 `upstream-fetch-failed` 仅说明任务来源。自动导入和上游同步先通过测试 PR 合入快照，再创建队列 Issue。
 
 ## 导入
 
@@ -28,6 +32,7 @@ npm run import -- \
 
 ```bash
 npm run import -- --url URL --category ad --slug example --publish
+npm run integrity:update
 npm test
 ```
 
@@ -62,3 +67,9 @@ egern:/modules/new?url=https://raw.githubusercontent.com/AWelook/Egern-Modules-O
 - `max_size` 原值保留，不用缩小上限伪装内存优化。
 - 未经真实流量确认的行为要记录为不足，不能宣称完全等效。
 - 原始上游、转换快照与发布版分开保存，便于逐项审计。
+- `registry.json` 同时记录上游和发布文件 SHA-256；CI 会拒绝未登记、重名或哈希过期的产物。
+- 推送 `main` 后，CI 会重新下载 GitHub Raw 模块与脚本并逐字节核对。
+
+## 来源与许可
+
+自动化、转换工具、测试和文档使用仓库根目录的 MIT 许可。第三方模块、脚本、快照和衍生文件仍受原作者条款约束，详见 `THIRD_PARTY_NOTICES.md`。

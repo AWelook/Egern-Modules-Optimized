@@ -36,6 +36,16 @@ test("extracts each remote script once", () => {
   assert.deepEqual(extractScriptUrls(source), ["https://example.com/clean.js"]);
 });
 
+test("preserves numeric Surge body flags", () => {
+  const input = `#!name=X
+[Script]
+x = type=http-response,pattern=^https:\\/\\/example\\.com,script-path=https://example.com/x.js,requires-body=1,binary-body-mode=1
+`;
+  const scripting = convertSurgeModule(input).document.scriptings[0].http_response;
+  assert.equal(scripting.body_required, true);
+  assert.equal(scripting.binary_body, true);
+});
+
 test("reports unsupported input instead of silently dropping it", () => {
   const result = convertSurgeModule("#!name=X\n[Body Rewrite]\nunsupported thing");
   assert.deepEqual(result.warnings, ["未转换 Body Rewrite: unsupported thing"]);

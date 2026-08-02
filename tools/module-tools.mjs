@@ -20,18 +20,64 @@ export function sha256(text) {
   return createHash("sha256").update(text).digest("hex");
 }
 
+export function parseBoolean(value) {
+  if (typeof value === "boolean") return value;
+  const normalized = String(value).trim().toLowerCase();
+  if (["1", "true", "yes", "on"].includes(normalized)) return true;
+  if (["0", "false", "no", "off"].includes(normalized)) return false;
+  throw new Error(`无效布尔值: ${value}`);
+}
+
+export function hasEgernDefaultExport(code) {
+  return /export\s+default\s+(?:async\s+)?function\b/.test(code)
+    || /export\s*\{[^}]*\bas\s+default\b[^}]*\}/.test(code);
+}
+
+export function uniqueFileName(base, extension, identity, usedNames) {
+  let candidate = `${base}${extension}`;
+  if (usedNames.has(candidate)) candidate = `${base}-${sha256(identity).slice(0, 8)}${extension}`;
+  let counter = 2;
+  while (usedNames.has(candidate)) {
+    candidate = `${base}-${sha256(identity).slice(0, 8)}-${counter}${extension}`;
+    counter += 1;
+  }
+  usedNames.add(candidate);
+  return candidate;
+}
+
 export function extensionFromUrl(url, fallback = ".txt") {
   const ext = path.extname(new URL(url).pathname);
   return ext && ext.length <= 12 ? ext : fallback;
 }
 
-export async function fetchText(url) {
-  const response = await fetch(url, {
-    headers: { "user-agent": "AWelook/Egern-Modules-Optimized" },
-    redirect: "follow"
-  });
-  if (!response.ok) throw new Error(`下载失败 ${response.status}: ${url}`);
-  return response.text();
+export async function fetchText(url, { retries = 2, timeoutMs = 20_000 } = {}) {
+  let lastError;
+  for (let attempt = 0; attempt <= retries; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        headers: { "user-agent": "AWelook/Egern-Modules-Optimized" },
+        redirect: "follow",
+        signal: AbortSignal.timeout(timeoutMs),
+      });
+      if (!response.ok) {
+        const error = new Error(`下载失败 ${response.status}: ${url}`);
+        error.status = response.status;
+        throw error;
+      }
+      return response.text();
+    } catch (error) {
+      lastError = error;
+      const retryable = error?.name === "TimeoutError"
+        || error?.name === "AbortError"
+        || error?.status === 408
+        || error?.status === 429
+        || error?.status >= 500
+        || Boolean(error?.cause);
+      if (!retryable || attempt === retries) break;
+      await new Promise((resolve) => setTimeout(resolve, 250 * (attempt + 1)));
+    }
+  }
+  throw lastError;
 }
 
 export function parseArgs(argv) {

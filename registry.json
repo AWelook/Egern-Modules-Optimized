@@ -14,14 +14,16 @@
         "upstream_path": "upstream/ad/12306/12306.js",
         "published_path": "scripts/ad/12306/12306.js",
         "runtime": "egern-native",
-        "sha256": "4723bc2236835eea0a8b79529c832a9af1cfd37fa1b160becb3a4b51f9067cd5"
+        "sha256": "4723bc2236835eea0a8b79529c832a9af1cfd37fa1b160becb3a4b51f9067cd5",
+        "published_sha256": "6fef81fc84fd3eea75be5b834fb40467acad02d08604ca7d30f6675981a794b5"
       }
     ],
     "dependencies": [],
     "status": "published",
     "upstream_sha256": "4723bc2236835eea0a8b79529c832a9af1cfd37fa1b160becb3a4b51f9067cd5",
     "warnings": [],
-    "conversion_notes": []
+    "conversion_notes": [],
+    "published_sha256": "c44db900308ccc82dc647de1d03da9ebbe73e019d3af4c33457620b472bd0702"
   },
   {
     "slug": "amap-ads",
@@ -38,14 +40,16 @@
         "upstream_path": "upstream/ad/amap-ads/amdc.js",
         "published_path": "scripts/ad/amap-ads/amdc.js",
         "runtime": "egern-native",
-        "sha256": "8217f2150f8d12ae04d2c49b5da0a838e83f4de68b34df71c2da16cc1267898f"
+        "sha256": "8217f2150f8d12ae04d2c49b5da0a838e83f4de68b34df71c2da16cc1267898f",
+        "published_sha256": "5b9f056c00aa281120078e4ba4e002ee0368cde07b911692bd2d138b928dec57"
       },
       {
         "upstream_url": "https://raw.githubusercontent.com/ddgksf2013/Scripts/refs/heads/master/amap.js",
         "upstream_path": "upstream/ad/amap-ads/amap.js",
         "published_path": "scripts/ad/amap-ads/amap.js",
         "runtime": "egern-native",
-        "sha256": "936aaaf97cf69b8a5a25ba49303c0470a16ac48851e8bf58080ff9f129ff7c48"
+        "sha256": "936aaaf97cf69b8a5a25ba49303c0470a16ac48851e8bf58080ff9f129ff7c48",
+        "published_sha256": "cf4ff16a5812586db664a60eac0f01d3f541b18ea3b6801a203553f61855b404"
       }
     ],
     "dependencies": [],
@@ -54,7 +58,8 @@
     "warnings": [],
     "conversion_notes": [
       "AMDC 原生脚本不读取上游响应体，已关闭 body_required 并移除无效的无限正文上限"
-    ]
+    ],
+    "published_sha256": "e9d161064f48f9da79eb106eaaa7658a182914c4fad20908b809bdd8179867c0"
   },
   {
     "slug": "coolapk-ads",
@@ -70,7 +75,8 @@
     "status": "published",
     "upstream_sha256": "67c568dd277be9d36825a72c0e5a45fc2e7cb386a7768e7557f2e0c0e898c107",
     "warnings": [],
-    "conversion_notes": []
+    "conversion_notes": [],
+    "published_sha256": "9734adad3c4c20a7dbf8cef1ef72d7c84e708b5f84ef5c55e7f998ced14e1c12"
   },
   {
     "slug": "didichuxing",
@@ -86,7 +92,8 @@
     "status": "published",
     "upstream_sha256": "6fb275fdac5599c88c1bda47ee7f43dab25429fc1a9678b4013835436b1d2a40",
     "warnings": [],
-    "conversion_notes": []
+    "conversion_notes": [],
+    "published_sha256": "0f2838652856919f96606370182a65ecd77f2b1025cccc7d88e37cb14e7005bd"
   },
   {
     "slug": "goofish-ads",
@@ -103,7 +110,8 @@
         "upstream_path": "upstream/ad/goofish-ads/amdc.js",
         "published_path": "scripts/ad/goofish-ads/amdc.js",
         "runtime": "egern-native",
-        "sha256": "8217f2150f8d12ae04d2c49b5da0a838e83f4de68b34df71c2da16cc1267898f"
+        "sha256": "8217f2150f8d12ae04d2c49b5da0a838e83f4de68b34df71c2da16cc1267898f",
+        "published_sha256": "4fbc2fdb2cfffef1611c45e64104691cc645105ba84ef8bcc11c94aa6f10e884"
       }
     ],
     "dependencies": [],
@@ -112,7 +120,8 @@
     "warnings": [],
     "conversion_notes": [
       "AMDC 原生脚本不读取上游响应体，已关闭 body_required 并移除无效的无限正文上限"
-    ]
+    ],
+    "published_sha256": "d9cd27e7e0dfe74fa5fc50244410f7c37bc30c99848505325273b920f19c68cc"
   },
   {
     "slug": "pinduoduo-ads",
@@ -129,7 +138,8 @@
         "upstream_path": "upstream/ad/pinduoduo-ads/PinDuoDuo_remove_ads.js",
         "published_path": "scripts/ad/pinduoduo-ads/PinDuoDuo_remove_ads.js",
         "runtime": "egern-native",
-        "sha256": "63af2e44da24da11f5c1bc930aefdcef2ce16aa65293be3e80ba8520d46e9c58"
+        "sha256": "63af2e44da24da11f5c1bc930aefdcef2ce16aa65293be3e80ba8520d46e9c58",
+        "published_sha256": "170c4ad4a932255df2f76ef0f9d7cd149e2e9bdbc71cddfc53316727f3bf1d74"
       }
     ],
     "dependencies": [
@@ -138,13 +148,15 @@
         "upstream_path": "upstream/ad/pinduoduo-ads/9410-b8806e870a26db7d.js",
         "published_path": "scripts/ad/pinduoduo-ads/9410-b8806e870a26db7d.js",
         "runtime": "web-asset",
-        "sha256": "e8e4f0e81525d314a7bc6af0fa45600b7d49b098f71f53ab36155d9ebd327ba7"
+        "sha256": "e8e4f0e81525d314a7bc6af0fa45600b7d49b098f71f53ab36155d9ebd327ba7",
+        "published_sha256": "e8e4f0e81525d314a7bc6af0fa45600b7d49b098f71f53ab36155d9ebd327ba7"
       }
     ],
     "status": "published",
     "upstream_sha256": "be800887ae2009e4121a9adf465ca87ac3aa0f0d7e1c9e5786009c3584d44f7e",
     "warnings": [],
-    "conversion_notes": []
+    "conversion_notes": [],
+    "published_sha256": "50283f8050bfc73aa09600fca247bfdac59c2b5fb977bc2ffba2c72528afcffd"
   },
   {
     "slug": "reddit-ads",
@@ -162,7 +174,8 @@
         "published_path": "scripts/ad/reddit-ads/translation.js",
         "runtime": "egern-native",
         "generated": true,
-        "sha256": null
+        "sha256": null,
+        "published_sha256": "71ee82bd6574f0b1fd68a69d69c57983f2b78ddcf253c920aafdaebe346e4d83"
       }
     ],
     "dependencies": [],
@@ -172,7 +185,8 @@
     "conversion_notes": [
       "[General] 为 Surge HTTP 引擎开关，Egern 原生重写不需要该开关",
       "两个参数化 Header Rewrite 已迁移为 Egern 原生请求脚本"
-    ]
+    ],
+    "published_sha256": "38ed7a3eae534a56d2f768f26f04d809a3cbe3d46216d23aa06e0f80a1234275"
   },
   {
     "slug": "weibo-intl-ads",
@@ -188,7 +202,8 @@
     "status": "published",
     "upstream_sha256": "b6a993b73118a0f91d5860a4edad7659caab83dbfd606d809308933ed7f73495",
     "warnings": [],
-    "conversion_notes": []
+    "conversion_notes": [],
+    "published_sha256": "293bb13defb3b49ded8b44cd43e1e79149304e87583ce1c9d75b269daa133a07"
   },
   {
     "slug": "xiaohongshu-ads",
@@ -205,14 +220,16 @@
         "upstream_path": "upstream/ad/xiaohongshu-ads/RedPaper_remove_ads.js",
         "published_path": "scripts/ad/xiaohongshu-ads/RedPaper_remove_ads.js",
         "runtime": "egern-native",
-        "sha256": "f7b637c9c738b18f72dd61824e25b06dad7d55553de204daad0dddd675a74f0c"
+        "sha256": "f7b637c9c738b18f72dd61824e25b06dad7d55553de204daad0dddd675a74f0c",
+        "published_sha256": "83f902ae5a9adca8c40f3af99a931b75918e3282c3e34ec80002ac9a65a2e371"
       }
     ],
     "dependencies": [],
     "status": "published",
     "upstream_sha256": "10d5def71188af07d745ce5a84b81ff5d77d7ead67258653611f9f1d228b92c8",
     "warnings": [],
-    "conversion_notes": []
+    "conversion_notes": [],
+    "published_sha256": "88c9ce659b5d05120857f21facb1a6e90953ba42a791334b2f99160167ed5212"
   },
   {
     "slug": "netease",
@@ -229,7 +246,8 @@
         "upstream_path": "upstream/music/netease/wyyad.js",
         "published_path": "scripts/music/netease/wyyad.js",
         "runtime": "egern-native",
-        "sha256": "7423635e7826d083bb41e147b921eb66c04ab538f01a123e82b6a18034c38571"
+        "sha256": "7423635e7826d083bb41e147b921eb66c04ab538f01a123e82b6a18034c38571",
+        "published_sha256": "ed28c0d9bc3bf0c902ef35136f23af2983ac2a0bd44929bd723b58c3553985c6"
       }
     ],
     "dependencies": [],
@@ -239,6 +257,7 @@
     "conversion_notes": [
       "保留上游 REJECT-NO-DROP 策略，避免改变拒绝连接语义",
       "九个 Surge 脚本注册合并为一个精确匹配的 Egern 二进制响应脚本"
-    ]
+    ],
+    "published_sha256": "a12038cb0071775ead5cfbef92fd3feaa20bd9e90a530a74430a6a0b2c93b8cb"
   }
 ]

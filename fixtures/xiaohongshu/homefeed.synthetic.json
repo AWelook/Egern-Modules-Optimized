@@ -1,0 +1,15 @@
+{
+  "fixture": {
+    "source": "synthetic",
+    "route": "/api/sns/v6/homefeed",
+    "contains_private_data": false
+  },
+  "payload": {
+    "data": [
+      { "id": "live", "model_type": "live_v2" },
+      { "id": "ad", "ads_info": {} },
+      { "id": "goods", "note_attributes": [] },
+      { "id": "keep", "related_ques": [1] }
+    ]
+  }
+}
