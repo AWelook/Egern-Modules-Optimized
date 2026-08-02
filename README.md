@@ -33,6 +33,7 @@ egern:/modules/new?url=https://raw.githubusercontent.com/AWelook/Egern-Modules-O
 | 微博轻享版 | [Raw](https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/modules/ad/weibo-intl-ads.yaml) | 单独版 |
 | 小红书 | [Raw](https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/modules/ad/xiaohongshu-ads.yaml) | 单独版 |
 | 网易云音乐 | [Raw](https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/modules/music/netease.yaml) | 独立音乐模块，不在去广告合集中 |
+| Apple WLOC 定位修改 | [Raw](https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/modules/tools/wloc.yaml) | Egern 原生参数、存储和二进制脚本 |
 
 不要同时启用去广告合集与其中的单独模块，否则相同请求可能被重复匹配。合集不包含 Spotify 和网易云音乐。
 

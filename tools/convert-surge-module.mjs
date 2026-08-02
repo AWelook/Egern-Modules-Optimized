@@ -194,6 +194,7 @@ function convertScripts(lines, output, warnings, scriptUrlMap) {
     if (values.timeout !== undefined) body.timeout = Number(values.timeout);
     if (values["requires-body"] !== undefined) body.body_required = parseBoolean(values["requires-body"]);
     if (values["binary-body-mode"] !== undefined) body.binary_body = parseBoolean(values["binary-body-mode"]);
+    if (values.argument !== undefined) body.env = { "_compat.$argument": values.argument };
     add(output, "scriptings", { [type]: body });
   }
 }
