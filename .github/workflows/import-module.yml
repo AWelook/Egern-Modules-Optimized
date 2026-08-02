@@ -22,6 +22,7 @@ on:
         type: string
 
 permissions:
+  actions: write
   contents: write
   issues: write
   pull-requests: write
@@ -69,6 +70,14 @@ jobs:
           git commit -m "chore: import ${{ inputs.category }}/${{ inputs.slug }}"
           git push -u origin "$branch"
           pr_url=$(gh pr create --base main --head "$branch" --title "chore: import ${{ inputs.category }}/${{ inputs.slug }}" --body "Save the upstream source and unoptimized Egern conversion, then create an optimization queue task after validation.")
+          for attempt in {1..30}; do
+            run_id=$(gh run list --event pull_request --branch "$branch" --limit 1 --json databaseId --jq '.[0].databaseId // empty')
+            if [ -n "$run_id" ]; then
+              gh api --method POST "repos/${GITHUB_REPOSITORY}/actions/runs/${run_id}/approve" >/dev/null 2>&1 || true
+              break
+            fi
+            sleep 2
+          done
           gh pr merge "$pr_url" --auto --squash --delete-branch
           for attempt in {1..60}; do
             state=$(gh pr view "$pr_url" --json state --jq .state)
