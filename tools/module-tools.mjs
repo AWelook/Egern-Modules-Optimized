@@ -1,5 +1,9 @@
 import { createHash } from "node:crypto";
+import { execFile } from "node:child_process";
 import path from "node:path";
+import { promisify } from "node:util";
+
+const execFileAsync = promisify(execFile);
 
 export function slugify(value) {
   return value
@@ -61,6 +65,27 @@ export function requestHeaders(url) {
   return { "user-agent": "AWelook/Egern-Modules-Optimized" };
 }
 
+export function curlArgs(url, timeoutMs) {
+  const args = [
+    "--fail", "--location", "--silent", "--show-error",
+    "--max-time", String(Math.max(1, Math.ceil(timeoutMs / 1000))),
+  ];
+  for (const [name, value] of Object.entries(requestHeaders(url))) {
+    args.push("--header", `${name}: ${value}`);
+  }
+  args.push(url);
+  return args;
+}
+
+async function fetchTextWithCurl(url, timeoutMs) {
+  const { stdout } = await execFileAsync("curl", curlArgs(url, timeoutMs), {
+    encoding: "utf8",
+    maxBuffer: 32 * 1024 * 1024,
+    timeout: timeoutMs + 5_000,
+  });
+  return stdout;
+}
+
 export async function fetchText(url, { retries = 2, timeoutMs = 20_000 } = {}) {
   let lastError;
   for (let attempt = 0; attempt <= retries; attempt += 1) {
@@ -71,19 +96,30 @@ export async function fetchText(url, { retries = 2, timeoutMs = 20_000 } = {}) {
         signal: AbortSignal.timeout(timeoutMs),
       });
       if (!response.ok) {
+        if (response.status === 403 && new URL(url).hostname.toLowerCase() === "kelee.one") {
+          return fetchTextWithCurl(url, timeoutMs);
+        }
         const error = new Error(`下载失败 ${response.status}: ${url}`);
         error.status = response.status;
         throw error;
       }
       return response.text();
     } catch (error) {
-      lastError = error;
-      const retryable = error?.name === "TimeoutError"
-        || error?.name === "AbortError"
-        || error?.status === 408
-        || error?.status === 429
-        || error?.status >= 500
-        || Boolean(error?.cause);
+      let resolvedError = error;
+      if (new URL(url).hostname.toLowerCase() === "kelee.one" && error?.cause) {
+        try {
+          return await fetchTextWithCurl(url, timeoutMs);
+        } catch (fallbackError) {
+          resolvedError = fallbackError;
+        }
+      }
+      lastError = resolvedError;
+      const retryable = resolvedError?.name === "TimeoutError"
+        || resolvedError?.name === "AbortError"
+        || resolvedError?.status === 408
+        || resolvedError?.status === 429
+        || resolvedError?.status >= 500
+        || Boolean(resolvedError?.cause);
       if (!retryable || attempt === retries) break;
       await new Promise((resolve) => setTimeout(resolve, 250 * (attempt + 1)));
     }

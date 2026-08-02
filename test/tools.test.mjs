@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  hasEgernDefaultExport, parseArgs, parseBoolean, requestHeaders, slugify, splitCommaFields, uniqueFileName,
+  curlArgs, hasEgernDefaultExport, parseArgs, parseBoolean, requestHeaders, slugify, splitCommaFields, uniqueFileName,
 } from "../tools/module-tools.mjs";
 
 test("slugifies names safely", () => assert.equal(slugify("A Map Ads.js"), "a-map-ads-js"));
@@ -34,4 +34,12 @@ test("uses a compatible client identity only for kelee.one", () => {
   assert.deepEqual(requestHeaders("https://raw.githubusercontent.com/example/file"), {
     "user-agent": "AWelook/Egern-Modules-Optimized",
   });
+});
+test("builds a shell-safe curl fallback for protected kelee.one sources", () => {
+  assert.deepEqual(curlArgs("https://kelee.one/file?a=1&b=2", 20_001), [
+    "--fail", "--location", "--silent", "--show-error", "--max-time", "21",
+    "--header", "referer: https://kelee.one/",
+    "--header", "user-agent: Loon/962 CFNetwork/1568.200.51 Darwin/24.1.0",
+    "https://kelee.one/file?a=1&b=2",
+  ]);
 });
