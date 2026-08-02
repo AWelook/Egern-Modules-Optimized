@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  hasEgernDefaultExport, parseArgs, parseBoolean, slugify, splitCommaFields, uniqueFileName,
+  hasEgernDefaultExport, parseArgs, parseBoolean, requestHeaders, slugify, splitCommaFields, uniqueFileName,
 } from "../tools/module-tools.mjs";
 
 test("slugifies names safely", () => assert.equal(slugify("A Map Ads.js"), "a-map-ads-js"));
@@ -25,4 +25,13 @@ test("keeps colliding remote script names unique", () => {
   assert.equal(first, "index.js");
   assert.match(second, /^index-[a-f0-9]{8}\.js$/u);
   assert.notEqual(first, second);
+});
+test("uses a compatible client identity only for kelee.one", () => {
+  assert.deepEqual(requestHeaders("https://kelee.one/Tool/Loon/example.lpx"), {
+    referer: "https://kelee.one/",
+    "user-agent": "Loon/962 CFNetwork/1568.200.51 Darwin/24.1.0",
+  });
+  assert.deepEqual(requestHeaders("https://raw.githubusercontent.com/example/file"), {
+    "user-agent": "AWelook/Egern-Modules-Optimized",
+  });
 });

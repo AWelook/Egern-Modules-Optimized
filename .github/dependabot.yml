@@ -8,6 +8,10 @@ updates:
     groups:
       npm-development:
         dependency-type: development
+    ignore:
+      - dependency-name: pako
+        update-types:
+          - version-update:semver-major
 
   - package-ecosystem: github-actions
     directory: /

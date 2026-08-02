@@ -50,12 +50,23 @@ export function extensionFromUrl(url, fallback = ".txt") {
   return ext && ext.length <= 12 ? ext : fallback;
 }
 
+export function requestHeaders(url) {
+  const hostname = new URL(url).hostname.toLowerCase();
+  if (hostname === "kelee.one") {
+    return {
+      referer: "https://kelee.one/",
+      "user-agent": "Loon/962 CFNetwork/1568.200.51 Darwin/24.1.0",
+    };
+  }
+  return { "user-agent": "AWelook/Egern-Modules-Optimized" };
+}
+
 export async function fetchText(url, { retries = 2, timeoutMs = 20_000 } = {}) {
   let lastError;
   for (let attempt = 0; attempt <= retries; attempt += 1) {
     try {
       const response = await fetch(url, {
-        headers: { "user-agent": "AWelook/Egern-Modules-Optimized" },
+        headers: requestHeaders(url),
         redirect: "follow",
         signal: AbortSignal.timeout(timeoutMs),
       });
