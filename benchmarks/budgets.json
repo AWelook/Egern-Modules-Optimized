@@ -6,5 +6,9 @@
   "netease-batch": {
     "max_duration_ms": 1500,
     "max_heap_delta_mb": 96
+  },
+  "wloc-wifi-protobuf": {
+    "max_duration_ms": 500,
+    "max_heap_delta_mb": 32
   }
 }

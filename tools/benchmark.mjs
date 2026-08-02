@@ -3,6 +3,8 @@ import { readFile } from "node:fs/promises";
 import { performance } from "node:perf_hooks";
 import xiaohongshu from "../scripts/ad/xiaohongshu-ads/RedPaper_remove_ads.js";
 import netease from "../scripts/music/netease/wyyad.js";
+import wloc from "../scripts/tools/wloc/wloc.js";
+import { concatBytes, encodeFieldForTest } from "../sources/tools/wloc/core.mjs";
 
 const budgets = JSON.parse(await readFile(new URL("../benchmarks/budgets.json", import.meta.url)));
 const results = [];
@@ -27,6 +29,12 @@ await measure("netease-batch", async () => {
     "/api/v2/resource/comments": { data: { comments } },
   }));
   assert.ok(result.body instanceof Uint8Array);
+});
+
+await measure("wloc-wifi-protobuf", async () => {
+  const result = await wloc(wlocContext(makeWlocFrame(1_000)));
+  assert.ok(result.body instanceof Uint8Array);
+  assert.ok(result.body.length > 30_000);
 });
 
 console.log(JSON.stringify(results, null, 2));
@@ -73,5 +81,40 @@ function neteaseContext(value) {
       arrayBuffer: async () => bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength),
     },
     storage: { get: () => null },
+  };
+}
+
+function makeWlocFrame(count) {
+  const location = concatBytes([
+    encodeFieldForTest(1, 0, 2_210_000_000),
+    encodeFieldForTest(2, 0, 11_310_000_000),
+    encodeFieldForTest(3, 0, 50),
+  ]);
+  const records = Array.from({ length: count }, (_, index) => {
+    const suffix = index.toString(16).padStart(4, "0");
+    const mac = new TextEncoder().encode(`aa:bb:cc:dd:${suffix.slice(0, 2)}:${suffix.slice(2)}`);
+    const wifi = concatBytes([
+      encodeFieldForTest(1, 2, mac),
+      encodeFieldForTest(2, 2, location),
+    ]);
+    return encodeFieldForTest(2, 2, wifi);
+  });
+  const payload = concatBytes(records);
+  return concatBytes([
+    new Uint8Array(8),
+    Uint8Array.of((payload.length >> 8) & 0xff, payload.length & 0xff),
+    payload,
+  ]);
+}
+
+function wlocContext(bytes) {
+  return {
+    env: { longitude: "121.4737", latitude: "31.2304", accuracy: "18", logLevel: "off" },
+    request: { url: "https://gs-loc.apple.com/clls/wloc" },
+    response: {
+      arrayBuffer: async () => bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength),
+      headers: new Headers(),
+    },
+    storage: { getJSON: () => null },
   };
 }

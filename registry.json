@@ -269,29 +269,33 @@
     "normalization_sha256": null,
     "upstream_path": "upstream/tools/wloc/source.sgmodule",
     "converted_path": "converted/tools/wloc/unoptimized.yaml",
-    "published_path": null,
+    "published_path": "modules/tools/wloc.yaml",
     "scripts": [
       {
         "upstream_url": "https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/main/dist/wloc.js",
         "upstream_path": "upstream/tools/wloc/wloc.js",
-        "published_path": null,
-        "runtime": "needs-port",
-        "sha256": "d385c624efd59bdd2cff56bf819a770b40c4abf0f970818877f1dca4174f256a"
+        "published_path": "scripts/tools/wloc/wloc.js",
+        "runtime": "egern-native",
+        "sha256": "d385c624efd59bdd2cff56bf819a770b40c4abf0f970818877f1dca4174f256a",
+        "published_sha256": "4fd506b317e3d476871e7a19e84e559a4508fe0da53720f01b82931c03b39f7c"
       },
       {
         "upstream_url": "https://raw.githubusercontent.com/Yu9191/wloc/refs/heads/main/dist/wloc-settings.js",
         "upstream_path": "upstream/tools/wloc/wloc-settings.js",
-        "published_path": null,
-        "runtime": "needs-port",
-        "sha256": "b4e9d69e69c703b3fab485a559825aaedc9e3a1fd9c06e81cb35d10bbdcd13d2"
+        "published_path": "scripts/tools/wloc/wloc-settings.js",
+        "runtime": "egern-native",
+        "sha256": "b4e9d69e69c703b3fab485a559825aaedc9e3a1fd9c06e81cb35d10bbdcd13d2",
+        "published_sha256": "c5cc8599932ddd2c291ce87778cf4199d94f92082b295c36d2ad637353c40cfa"
       }
     ],
-    "status": "needs-optimization",
+    "status": "published",
     "upstream_sha256": "5d6b82c31316f4a7be65e3b8d2335f4338e01af98e262948118eefe63abf7034",
     "warnings": [],
     "conversion_notes": [
-      "模块已转换为 Egern YAML，并通过 env._compat.$argument 保留 Surge 脚本参数",
-      "两个 JavaScript 保持原作者兼容版本和原始远程地址，未标记为 Egern 原生发布脚本"
-    ]
+      "未经优化的转换快照通过 env._compat.$argument 保留 Surge 脚本参数",
+      "发布模块改用 ctx.env、ctx.storage、ctx.respond 和 ctx.response.arrayBuffer 原生接口",
+      "保留 gzip、标准帧扫描与 raw protobuf fallback；max_size 和超时未缩小"
+    ],
+    "published_sha256": "f21e2c94603cc9e39e652c7a68238bb2fe9f087e5472aed60f95d7cf4c61a3e1"
   }
 ]

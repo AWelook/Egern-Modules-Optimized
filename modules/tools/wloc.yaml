@@ -1,0 +1,41 @@
+name: Apple WLOC 定位修改（Egern 原生优化版）
+description: "修改 Apple 网络定位返回坐标；Egern 原生参数、存储与二进制响应处理"
+author: Yu9191 Rewrite; optimized for Egern by AWelook
+homepage: https://github.com/AWelook/Egern-Modules-Optimized
+compat_arguments:
+  经度: "113.94114"
+  纬度: "22.544577"
+  精度: "25"
+  日志级别: info
+compat_arguments_desc: |-
+  经度/纬度: 默认坐标（在线选点储存后优先）
+  精度: GPS精度（米）
+  日志级别: off/error/warn/info/debug/all
+
+  使用方法: 打开 https://wloc-pages.pages.dev/ -> 选位置 -> 储存到设备
+scriptings:
+  - http_response:
+      name: Apple WLOC
+      match: ^https?:\/\/gs-loc(-cn)?\.apple\.com\/clls\/wloc
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/tools/wloc/wloc.js
+      max_size: 0
+      timeout: 30
+      body_required: true
+      binary_body: true
+      env:
+        longitude: "{{{经度}}}"
+        latitude: "{{{纬度}}}"
+        accuracy: "{{{精度}}}"
+        logLevel: "{{{日志级别}}}"
+  - http_request:
+      name: WLOC Settings
+      match: ^https?:\/\/gs-loc(-cn)?\.apple\.com\/wloc-settings\/save
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/tools/wloc/wloc-settings.js
+      max_size: 0
+      timeout: 10
+      body_required: false
+mitm:
+  hostnames:
+    includes:
+      - gs-loc.apple.com
+      - gs-loc-cn.apple.com
