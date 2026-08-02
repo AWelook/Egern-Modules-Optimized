@@ -1,0 +1,117 @@
+name: AmapAds
+description: AmapAds
+rules:
+  - domain_suffix:
+      match: optimus-ads.amap.com
+      policy: DIRECT
+url_rewrites:
+  - match: ^https?:\/\/.*\.amap\.com\/ws\/asa\/ads_attribution
+    location: http://reject/
+  - match: ^https?:\/\/.*\.amap\.com\/uploadimg\/\w+\.gif
+    location: http://reject-img/
+map_locals:
+  - match: ^https?:\/\/.*\.amap\.com\/ws\/aos\/alimama\/splash_screen
+    status_code: 200
+    body: " "
+  - match: ^https?:\/\/.*\.amap\.com\/v\d\/ai_rec\/
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https?:\/\/.*\.amap\.com\/ws\/faas\/amap-navigation\/card-service-route-plan\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https?:\/\/.*\.amap\.com\/ws\/boss\/order_web\/\w{8}_information
+    status_code: 200
+    body: " "
+  - match: ^https?:\/\/.*\.amap\.com\/ws\/shield\/scene\/recommend
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https?:\/\/.*\.amap\.com\/ws\/valueadded\/weather
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+scriptings:
+  - http_response:
+      name: amdc
+      match: ^http:\/\/amdc\.m\.taobao\.com
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/ad/amap-ads/amdc.js
+      max_size: -1
+      timeout: 60
+      body_required: true
+  - http_response:
+      name: amap
+      match: ^https?:\/\/.*\.amap\.com\/ws\/message\/notice\/list
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/ad/amap-ads/amap.js
+      max_size: -1
+      timeout: 60
+      body_required: true
+  - http_response:
+      name: amap
+      match: ^https?:\/\/.*\.amap\.com\/ws\/shield\/frogserver\/aocs\/updatable
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/ad/amap-ads/amap.js
+      max_size: -1
+      timeout: 60
+      body_required: true
+  - http_response:
+      name: amap
+      match: ^https?:\/\/.*\.amap\.com\/ws\/shield\/search\/nearbyrec_smart
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/ad/amap-ads/amap.js
+      max_size: -1
+      timeout: 60
+      body_required: true
+  - http_response:
+      name: amap
+      match: ^https?:\/\/.*\.amap\.com\/ws\/promotion-web\/resource
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/ad/amap-ads/amap.js
+      max_size: -1
+      timeout: 60
+      body_required: true
+  - http_response:
+      name: amap
+      match: ^https?:\/\/.*\.amap\.com\/ws\/faas\/amap-navigation\/main-page
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/ad/amap-ads/amap.js
+      max_size: -1
+      timeout: 60
+      body_required: true
+  - http_response:
+      name: amap
+      match: ^https?:\/\/.*\.amap\.com\/ws\/valueadded\/alimama\/splash_screen
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/ad/amap-ads/amap.js
+      max_size: -1
+      timeout: 60
+      body_required: true
+  - http_response:
+      name: amap
+      match: ^https?:\/\/.*\.amap\.com\/ws\/msgbox\/pull
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/ad/amap-ads/amap.js
+      max_size: -1
+      timeout: 60
+      body_required: true
+  - http_response:
+      name: amap
+      match: ^https?:\/\/.*\.amap\.com\/ws\/shield\/dsp\/profile\/index\/nodefaas
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/ad/amap-ads/amap.js
+      max_size: -1
+      timeout: 60
+      body_required: true
+  - http_response:
+      name: amap
+      match: ^https?:\/\/.*\.amap\.com\/ws\/shield\/search\/new_hotword
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/ad/amap-ads/amap.js
+      max_size: -1
+      timeout: 60
+      body_required: true
+mitm:
+  hostnames:
+    includes:
+      - m5.amap.com
+      - m5-zb.amap.com
+      - center.amap.com
+      - amap-aos-info-nogw.amap.com
+      - ai.amap.com

@@ -1,4 +1,4 @@
-import { access, readFile } from "node:fs/promises";
+import { access, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import YAML from "yaml";
 
@@ -19,8 +19,30 @@ for (const item of registry) {
   for (const script of item.scripts ?? []) {
     try {
       const code = await readFile(path.join(root, script.published_path), "utf8");
-      if (!/export\s+default\s+async\s+function/.test(code)) errors.push(`${script.published_path}: 不是 Egern 原生脚本`);
+      if (script.runtime !== "web-asset" && !/export\s+default\s+async\s+function/.test(code)) errors.push(`${script.published_path}: 不是 Egern 原生脚本`);
     } catch { errors.push(`${script.published_path}: 发布脚本不存在`); }
+  }
+  for (const dependency of item.dependencies ?? []) {
+    try { await access(path.join(root, dependency.published_path)); }
+    catch { errors.push(`${dependency.published_path}: 发布依赖不存在`); }
+  }
+}
+const rawPrefix = "https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/";
+for (const fileName of await readdir(path.join(root, "modules", "ad"))) {
+  if (!fileName.endsWith(".yaml")) continue;
+  const modulePath = path.join(root, "modules", "ad", fileName);
+  let document;
+  try { document = YAML.parse(await readFile(modulePath, "utf8")); }
+  catch (error) { errors.push(`modules/ad/${fileName}: YAML 无效: ${error.message}`); continue; }
+  for (const entry of document.scriptings ?? []) {
+    const scripting = Object.values(entry)[0];
+    const url = scripting?.script_url;
+    if (!url?.startsWith(rawPrefix)) {
+      errors.push(`modules/ad/${fileName}: 脚本未托管在本仓库: ${url ?? "missing"}`);
+      continue;
+    }
+    try { await access(path.join(root, url.slice(rawPrefix.length))); }
+    catch { errors.push(`modules/ad/${fileName}: 脚本链接目标不存在: ${url}`); }
   }
 }
 if (errors.length) {

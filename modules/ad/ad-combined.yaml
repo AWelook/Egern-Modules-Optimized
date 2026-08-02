@@ -1,0 +1,618 @@
+name: 去广告合集（不含 Spotify 与网易云）
+description: 合并 12306、高德地图、酷安、滴滴出行、闲鱼、拼多多、Reddit、微博轻享版和小红书去广告；请勿与对应单独版同时启用
+author: 原规则作者与 AWelook
+homepage: https://github.com/AWelook/Egern-Modules-Optimized
+rules:
+  - domain:
+      match: ad.12306.cn
+      policy: DIRECT
+  - domain_suffix:
+      match: optimus-ads.amap.com
+      policy: DIRECT
+  - domain:
+      match: gwp.xiaojukeji.com
+      policy: REJECT
+  - ip_cidr:
+      match: 139.199.244.6/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr:
+      match: 113.46.225.9/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr:
+      match: 139.199.244.7/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr:
+      match: 113.46.225.8/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr:
+      match: 123.207.209.39/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr:
+      match: 123.207.209.60/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr:
+      match: 139.199.240.15/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr:
+      match: 139.199.240.12/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr:
+      match: 116.85.3.37/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr:
+      match: 162.14.157.2/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr:
+      match: 162.14.157.24/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr:
+      match: 116.85.1.0/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr:
+      match: 116.85.1.17/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr:
+      match: 116.85.1.22/32
+      policy: REJECT
+      no_resolve: true
+  - ip_cidr:
+      match: 116.85.3.25/32
+      policy: REJECT
+      no_resolve: true
+  - domain_suffix:
+      match: iyes.youku.com
+      policy: REJECT
+  - and:
+      match:
+        - url_regex:
+            match: ^http:\/\/((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/d(\d)?
+        - user_agent:
+            match: "*com.xunmeng.pinduoduo*"
+      policy: REJECT
+  - and:
+      match:
+        - url_regex:
+            match: ^http:\/\/\[[0-9a-fA-F:]+\]\/d(\d)?\?
+        - user_agent:
+            match: "*com.xunmeng.pinduoduo*"
+      policy: REJECT
+  - and:
+      match:
+        - domain:
+            match: api.pinduoduo.com
+        - protocol:
+            match: quic
+      policy: REJECT
+  - domain:
+      match: titan.pinduoduo.com
+      policy: REJECT
+  - domain:
+      match: xg.pinduoduo.com
+      policy: REJECT
+  - domain:
+      match: cdl-1.pddpic.com
+      policy: REJECT
+  - domain:
+      match: cdl-p2.pddpic.com
+      policy: REJECT
+  - domain:
+      match: cd-1.pddpic.com
+      policy: REJECT
+  - domain:
+      match: apm.pinduoduo.com
+      policy: REJECT
+  - domain:
+      match: th-b.pinduoduo.com
+      policy: REJECT
+  - domain:
+      match: ta.pinduoduo.com
+      policy: REJECT
+  - domain:
+      match: th.pinduoduo.com
+      policy: REJECT
+  - domain:
+      match: th-a.pinduoduo.com
+      policy: REJECT
+  - domain:
+      match: ta-a.pinduoduo.com
+      policy: REJECT
+  - domain:
+      match: meta.pinduoduo.com
+      policy: REJECT
+  - domain:
+      match: apm-a.pinduoduo.com
+      policy: REJECT
+  - and:
+      match:
+        - protocol:
+            match: quic
+        - domain_suffix:
+            match: xiaohongshu.com
+      policy: REJECT
+scriptings:
+  - http_request:
+      name: "12306"
+      match: ^https?:\/\/ad\.12306\.cn\/ad\/ser\/getAdList
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/ad/12306/12306.js
+      max_size: -1
+      timeout: 60
+      body_required: true
+  - http_response:
+      name: amap
+      match: ^https?:\/\/.*\.amap\.com\/(?:ws\/message\/notice\/list|ws\/shield\/frogserver\/aocs\/updatable|ws\/shield\/search\/nearbyrec_smart|ws\/promotion-web\/resource|ws\/faas\/amap-navigation\/main-page|ws\/valueadded\/alimama\/splash_screen|ws\/msgbox\/pull|ws\/shield\/dsp\/profile\/index\/nodefaas|ws\/shield\/search\/new_hotword)
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/ad/amap-ads/amap.js
+      max_size: -1
+      timeout: 60
+      body_required: true
+  - http_response:
+      name: 移除扫码取件页面商品推荐及弹窗
+      match: ^https:\/\/m\.pinduoduo\.net\/mdkd\/package\?from_app_scan
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/ad/pinduoduo-ads/PinDuoDuo_remove_ads.js
+      body_required: true
+  - http_request:
+      name: reddit_translation
+      match: ^https:\/\/gql(?:-fed)?\.reddit\.com\/
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/ad/reddit-ads/translation.js
+      env:
+        TRANSLATION: "{{{TRANSLATION}}}"
+        TRANSLATION_VALUE: "{{{TRANSLATION_VALUE}}}"
+  - http_response:
+      name: xiaohongshu_response
+      match: ^https:\/\/(?:edith\.xiaohongshu\.com\/api\/sns\/(?:v1\/note\/(?:imagefeed|live_photo\/save)|v1\/system\/service\/ui\/config\?|v1\/system_service\/config\?|v2\/system_service\/splash_config|v2\/(?:note\/widgets|user\/followings\/followfeed)|v4\/followfeed\?|v5\/recommend\/user\/follow_recommend\?|(?:v1\/interaction\/comment\/video\/download|v5\/note\/comment\/list)|(?:v2\/note\/feed|v3\/note\/videofeed))|(?:edith|rec)\.xiaohongshu\.com\/api\/sns\/v6\/homefeed\?|(?:edith|so)\.xiaohongshu\.com\/api\/sns\/v10\/search\/notes\?|(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/(?:v4\/note\/videofeed|v10\/note\/video\/save))
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/ad/xiaohongshu-ads/RedPaper_remove_ads.js
+      body_required: true
+  - http_response:
+      name: combined_amdc
+      match: ^http:\/\/(?:amdc\.m\.taobao\.com|[a-zA-Z0-9_-]+(?:\.[a-zA-Z0-9_-]+){1,4}(?::\d+)?\/amdc\/mobileDispatch)
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/ad/goofish-ads/amdc.js
+      body_required: false
+      timeout: 60
+url_rewrites:
+  - match: ^https?:\/\/.*\.amap\.com\/ws\/asa\/ads_attribution
+    location: http://reject/
+  - match: ^https?:\/\/.*\.amap\.com\/uploadimg\/\w+\.gif
+    location: http://reject-img/
+  - match: ^https:\/\/ci\.xiaohongshu\.com\/system_config\/watermark
+    location: http://reject-img/
+map_locals:
+  - match: ^https?:\/\/.*\.amap\.com\/ws\/aos\/alimama\/splash_screen
+    status_code: 200
+    body: ""
+  - match: ^https?:\/\/.*\.amap\.com\/v\d\/ai_rec\/
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https?:\/\/.*\.amap\.com\/ws\/faas\/amap-navigation\/card-service-route-plan\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https?:\/\/.*\.amap\.com\/ws\/boss\/order_web\/\w{8}_information
+    status_code: 200
+    body: ""
+  - match: ^https?:\/\/.*\.amap\.com\/ws\/shield\/scene\/recommend
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https?:\/\/.*\.amap\.com\/ws\/valueadded\/weather
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.coolapk\.com\/v6\/search\?.*type=hotSearch
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/res\.xiaojukeji\.com\/resapi\/activity\/getMulti\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/res\.xiaojukeji\.com\/resapi\/activity\/xpget
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/ct\.xiaojukeji\.com\/agent\/v3\/feeds
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/freight\.xiaojukeji\.com\/gateway
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/daijia\.kuaidadi\.com:443\/gateway
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/res\.xiaojukeji\.com\/resapi\/activity\/mget
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/conf\.diditaxi\.com\.cn\/homepage\/v\d\/other\/fast
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/conf\.diditaxi\.com\.cn\/homepage\/v\d\/other\/slow
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/conf\.diditaxi\.com\.cn\/dynamic\/conf
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.udache\.com\/gulfstream\/watson\/v1\/bubble\/getBubble
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/res\.xiaojukeji\.com\/resapi\/activity\/getInsActivityV2
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/conf\.diditaxi\.com\.cn\/ota\/na\/yuantu\/infoList
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.*splash\.ads
+    status_code: 200
+    body: ""
+  - match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop\.idle\.ad\.expose(?:\/|\?|$)
+    status_code: 200
+    body: ""
+  - match: ^https:\/\/api\.pinduoduo\.com\/api\/aristotle\/unrated_order_for_unreceived_tab\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.pinduoduo\.com\/api\/aristotle\/query_order_list_tabs_element\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.pinduoduo\.com\/api\/aquarius\/hungary\/global\/homepage\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/order_express_group\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.pinduoduo\.com\/search_hotquery\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.pinduoduo\.com\/api\/zaire_biz\/chat\/resource\/get_list_data\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/new_chat_group\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/goods\/back_up\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/personal\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.pinduoduo\.com\/api\/brand-olay\/goods_detail\/bybt_guide\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.pinduoduo\.com\/api\/engels\/reviews\/require\/append\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/my_order_group\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/likes\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.pinduoduo\.com\/api\/phantom\/gbdbpdv\/extra\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.pinduoduo\.com\/api\/manufacturer\/cross\/shortcut\/list\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.pinduoduo\.com\/api\/dunkirk\/liveactivity\/push\/create\/url\/report\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.pinduoduo\.com\/api\/growth\/nagato\/app\/index\/gather\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.pinduoduo\.com\/api\/engels\/wait\/receive\/review\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.pinduoduo\.com\/api\/buffon\/nasus\/recommend\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v2\/query\/goods_detail_with_tags\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https?:\/\/api\.weibo\.cn\/2\/ad\/weibointl\?
+    status_code: 200
+    body: "{}"
+  - match: ^https?:\/\/weibointl\.api\.weibo\.cn\/portal\.php\?a=get_searching_info&
+    status_code: 200
+    body: '{"retcode":0,"info":"","data":{"expiration_time":"86400","cards":[{"tip":"搜索微博","word":""}]}}'
+    headers:
+      Content-Type: text/html
+  - match: ^https?:\/\/weibointl\.api\.weibo\.cn\/portal\.php\?ct=feed&a=search_topic&
+    status_code: 200
+    body: '{"retcode":0,"info":"","data":[],"ext":{}}'
+    headers:
+      Content-Type: text/html
+  - match: ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/surprisebox\/(?:get_style|open|submit_action)
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/www\.xiaohongshu\.com\/api\/marketing\/box\/trigger\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/(?:v2\/guide\/user_banner|v3\/note\/guide)
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/www\.xiaohongshu\.com\/api\/sns\/(?:v1\/ads\/resource|v2\/hey\/\w+\/hey_gallery)
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+body_rewrites:
+  - response_jq:
+      match: ^https:\/\/api\.coolapk\.com\/v6\/feed\/detail\?
+      filter: .data.hotReplyRows |= if . then map(select(.id?)) else . end | .data.topReplyRows |= if . then map(select(.id?)) else . end | reduce ("detailSponsorCard", "include_goods", "include_goods_ids") as $key (.; .data[$key]=[])
+  - response_jq:
+      match: ^https:\/\/api\.coolapk\.com\/v6\/feed\/replyList
+      filter: if (.data? | type) == "array" then .data |= map(select(.id?)) else . end
+  - response_jq:
+      match: ^https:\/\/api\.coolapk\.com\/v6\/main\/dataList
+      filter: .data |= (if type=="array" then map(select((.entityTemplate!="sponsorCard") and (.title!="精选配件"))) else . end)
+  - response_jq:
+      match: ^https:\/\/api\.coolapk\.com\/v6\/page\/dataList
+      filter: if (.data | length > 0) then .data |= map(select((.title? != "酷安热搜") and (.entityTemplate? != "imageScaleCard") and (.entityTemplate? != "sponsorCard"))) else . end
+  - response_jq:
+      match: ^https:\/\/api\.coolapk\.com\/v6\/main\/indexV8
+      filter: .data |= (if length > 0 then map(select((.entityTemplate != "sponsorCard") and (.entityId as $id | [8639,29349,33006,32557] | index($id) | not) and ((.title// "" | test("值得买|红包")) | not))) else . end)
+  - response_jq:
+      match: ^https:\/\/api\.coolapk\.com\/v6\/main\/init
+      filter: .data |= map(select(.entityId? as $id | [944,945,6390] | index($id) | not) | if .entityId == 20131 then .entities |= map(select(.title != "酷品")) else . end)
+  - response_jq:
+      match: ^https:\/\/common\.diditaxi\.com\.cn\/common\/v[5-9]\/usercenter\/layout
+      filter: .data.layout.order |= map(select(. == "center_base_info_card" or . == "center_order_related_card" or . == "center_wallet_finance_card")) | (.data.instances.center_wallet_finance_card.data.view_info |= map(select(.title == "优惠卡券"))) | del(.data.instances.center_marketing_card, .data.instances.center_member_card, .data.instances.center_tool_card, .data.instances.center_widget_list)
+  - response_jq:
+      match: ^https:\/\/common\.diditaxi\.com\.cn\/common\/v\d\/usercenter\/me
+      filter: .data.cards |= map(select(.title != "天天领福利" and .title != "金融服务" and .title != "更多服务" and .title != "企业服务" and .title != "安全中心") | if .tag == "wallet" then (.items |= map(select(.title == "优惠券"))) | (if .card_type == 4 then .bottom_items |= map(select(.title == "省钱套餐" or .title == "出行里程")) else . end) else . end)
+  - response_jq:
+      match: ^https:\/\/conf\.diditaxi\.com\.cn\/homepage\/v\d\/core
+      filter: .data.order_cards.nav_list_card.data |= map(select(.nav_id == "dache_anycar" or .nav_id == "driverservice" or .nav_id == "bike" or .nav_id == "carmate" or .nav_id == "nav_more_v3")) | .data.disorder_cards.bottom_nav_list.data |= map(select(.id == "v6x_home" or .id == "home_page" or .id == "user_center")) | .data.disorder_cards.top_nav_list.data.top_nav_info |= map(select(.name != "旅行" and .name != "车主"))
+  - response_jq:
+      match: ^https:\/\/api\.udache\.com\/gulfstream\/pre-sale\/v1\/other\/pGetSceneList
+      filter: .data.scene_list |= map(select(.text != "优惠商城")) | .data.show_data |= map(.scene_ids |= map(select(. != "scene_coupon_mall")))
+  - response_jq:
+      match: ^https:\/\/conf\.diditaxi\.com\.cn\/homepage\/v1\/oversea\/layout
+      filter: del(.data.instances.oversea_main_banner)
+  - response_jq:
+      match: ^https:\/\/api\.udache\.com\/gulfstream\/porsche\/v1\/dache_homepage_layout
+      filter: del(.data.instances["xp-card-01"])
+  - response_jq:
+      match: ^https:\/\/api\.udache\.com\/gulfstream\/passenger-center\/v2\/other\/pInTripLayout
+      filter: del(.data.order_components[8].data) | .data.order_components |= map(select(.name != "passenger_common_casper"))
+  - response_jq:
+      match: ^https:\/\/mapi\.xiaojukeji\.com\/passenger-wallet\/api\/v[\d.]+\/wallet\/homepage
+      filter: .data.cardList |= map(select(.mcode == "index_assets_v6") | .detailData |= (del(.myCreditLimit) | .discountList |= .[:3] | del(.noticeList)))
+  - response_jq:
+      match: ^https:\/\/manhattan\.webapp\.xiaojukeji\.com\/zootopia\/api\/my-assets\/get-assets-data
+      filter: del(.data.myQuotaModularRes, .data.assetsData.myQuotaModularRes, .data.banner, .data.assetsData.banner, .data.myGuaranteeModularRes, .data.assetsData.myGuaranteeModularRes)
+  - response_jq:
+      match: ^https:\/\/manhattan\.webapp\.xiaojukeji\.com\/zootopia\/api\/my-assets\/module-is-show
+      filter: .data = []
+  - response_jq:
+      match: ^https:\/\/ddpay\.xiaojukeji\.com\/ddpay\/api\/manhattan-small-change\/get-all-config
+      filter: .data.result = []
+  - response_jq:
+      match: ^https:\/\/ddpay\.xiaojukeji\.com\/ddpay\/api\/manhattan-small-change\/get-apollo-config
+      filter: .data.result.hideList = []
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.user\.strategy\.list(?:\/|\?|$)
+      filter: .data.strategies = [{}]
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlehome\.home\.circle\.list(?:\/|\?|$)
+      filter: if (.data.circleList? | type) == "array" then .data.circleList |= map(select(.bizCode? != "saveMoney")) else . end
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlehome\.home\.nextfresh(?:\/|\?|$)
+      filter: if (.data.homeTopList? | type) == "array" then .data.homeTopList |= .[0:1] else . end | if (.data.sections? | type) == "array" then .data.sections |= map(select(.data.bizType? == "item")) else . end
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlemtopsearch\.search\.shade(?:\/|\?|$)
+      filter: .data.singleShadeWords = [{}]
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlemtopsearch\.item\.search\.activate(?:\/|\?|$)
+      filter: .data.cardList = [{}]
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlemtopsearch\.search\.discover(?:\/|\?|$)
+      filter: del(.data.resultList)
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop\.idle\.user\.page\.my\.adapter(?:\/|\?|$)
+      filter: .data.ability = [] | if (.data.container.sections? | type) == "array" then .data.container.sections |= map(select((.sectionBizCode? | type) == "string" and (.sectionBizCode | test("head|user|trade")))) else . end
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.item\.buy\.feeds(?:\/|\?|$)
+      filter: del(.data.sections)
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.local\.home(?:\/|\?|$)
+      filter: if (.data.sections? | type) == "array" then .data.sections |= map(select(.data.bizType? == "item")) else . end
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlemtopsearch\.search(?:\/|\?|$)
+      filter: if (.data.resultList? | type) == "array" then .data.resultList |= map(select(.data.item.main.clickParam.args.biz_type? == "item")) else . end
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.item\.recommend(?:\/|\?|$)
+      filter: if (.data.cardList? | type) == "array" then .data.cardList |= map(select(.cardData.bizType? != "mamaAD")) else . end
+  - response_jq:
+      match: ^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub\?
+      filter: delpaths([["result","dy_module","irregular_banner_dy"],["result","icon_set"],["result","search_bar_hot_query"]]) | .result.bottom_tabs? |= map(select(.link | IN("index.html", "chat_list.html", "personal.html"))) | .result.buffer_bottom_tabs? |= map(select(.link | IN("index.html", "chat_list.html", "personal.html"))) | .result.all_top_opts |= map(del(.selected_image, .image, .height, .width))
+  - response_jq:
+      match: ^https:\/\/api\.pinduoduo\.com\/search\?
+      filter: delpaths([["expansion"]])
+  - response_jq:
+      match: ^https:\/\/api\.pinduoduo\.com\/api\/philo\/personal\/hub\?
+      filter: delpaths([["monthly_card_entrance"],["personal_center_style_v2_vo"],["icon_set","icons"],["icon_set","top_personal_icons"],["personal_banner"]])
+  - response_jq:
+      match: ^https:\/\/api\.pinduoduo\.com\/api\/oak\/integration\/render\?
+      filter: delpaths([["bottom_section_list"],["ui","bottom_section"],["ui","live_section","float_info"]])
+  - response_jq:
+      match: ^https:\/\/api\.pinduoduo\.com\/api\/caterham\/v3\/query\/order_detail_group\?
+      filter: delpaths([["data","goods_list"]])
+  - response_jq:
+      match: ^https:\/\/api\.pinduoduo\.com\/order\/
+      filter: delpaths([["marketing_banner_vo"],["shipping","banner_above_recommend"]])
+  - response_jq:
+      match: ^https:\/\/api\.pinduoduo\.com\/api\/aristotle\/order_list_v4\?
+      filter: .orders |= map(.order_buttons |= map(del(.order_growth_tip)))
+  - response_jq:
+      match: ^https?:\/\/gql(-fed)?\.reddit\.com
+      filter: 'def reddit_walk: if type == "object" then if .__typename == "AdPost" then empty else map_values(reddit_walk) | .node as $node | if (($node | type) == "object" and (($node.adPayload | type) == "object" or (($node.cells | type) == "array" and ($node.cells | any(.__typename? == "AdMetadataCell" or .isAdPost? == true))))) then empty else (if .is{{{NSFW}}} == true then .is{{{NSFW}}} = false else . end) | (if .is{{{NSFW}}}MediaBlocked == true then .is{{{NSFW}}}MediaBlocked = false else . end) | (if .is{{{NSFW}}}ContentShown == false then .is{{{NSFW}}}ContentShown = true else . end) | (if (.commentsPageAds | type) == "array" then .commentsPageAds = [] else . end) end end elif type == "array" then map(reddit_walk) else . end; reddit_walk'
+  - response_jq:
+      match: ^https?:\/\/api\.weibo\.cn\/2\/statuses\/unread_hot_timeline$
+      filter: del(.ad, .advertises, .trends) | if .statuses then .statuses |= map(select(((.promotion.type == "ad") or (.mblogtypename | IN("广告", "廣告", "热推", "熱推"))) | not)) end
+  - response_jq:
+      match: ^https?:\/\/weibointl\.api\.weibo\.cn\/portal\.php\?a=get_coopen_ads&
+      filter: .data |= . + {"ad_list":[],"pic_ad":[],"gdt_video_ad_ios":[],"display_ad":0,"ad_ios_id":null,"app_ad_ios_id":null,"reserve_ad_ios_id":"","reserve_app_ad_ios_id":"","ad_duration":604800,"ad_cd_interval":604800}
+  - response_jq:
+      match: ^https?:\/\/weibointl\.api\.weibo\.cn\/portal\.php\?a=trends&
+      filter: if .data.order then .data.order=["search_topic"] end
+  - response_jq:
+      match: ^https?:\/\/weibointl\.api\.weibo\.cn\/portal\.php\?a=search_topic&
+      filter: if .data.search_topic.cards[0].type == "searchtop" then del(.data.search_topic.cards[0]) end
+  - response_jq:
+      match: ^https?:\/\/weibointl\.api\.weibo\.cn\/portal\.php\?a=user_center&
+      filter: if .data.cards then .data.cards |= map((.items |= map(select(.type != "personal_vip"))) | select((.items | length) > 0)) end
+  - response_jq:
+      match: ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/search\/banner_list$
+      filter: if (getpath([]) | has("data")) then (setpath(["data"]; {})) else . end
+  - response_jq:
+      match: ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/search\/hot_list$
+      filter: if (getpath(["data"]) | has("items")) then (setpath(["data","items"]; [])) else . end
+  - response_jq:
+      match: ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v4\/search\/hint
+      filter: if (getpath(["data"]) | has("hint_words")) then (setpath(["data","hint_words"]; [])) else . end
+  - response_jq:
+      match: ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v4\/search\/trending\?
+      filter: if (getpath(["data"]) | has("queries")) then (setpath(["data","queries"]; [])) else . end | if (getpath(["data"]) | has("hint_word")) then (setpath(["data","hint_word"]; {})) else . end
+compat_arguments:
+  NSFW: Nsfw
+  TRANSLATION: http-request
+  TRANSLATION_VALUE: enabled, seo, zh-hans
+compat_arguments_desc: |-
+  1️⃣ NSFW
+
+  填写 Nsfw 时, 表示关闭 NSFW 提示, 其他值表示恢复默认行为
+
+  2️⃣ TRANSLATION
+
+  填写 http-request 时, 表示开启自动翻译, # 表示关闭自动翻译.
+  ⚠️ 由于无法区分首次原始请求和手动点击翻译的请求, 开启之后 App 内切换功能就无效了...
+
+  3️⃣ TRANSLATION_VALUE
+
+  如果 Reddit 改了行为, 可以自己改这个值
+mitm:
+  hostnames:
+    includes:
+      - ad.12306.cn
+      - m5.amap.com
+      - m5-zb.amap.com
+      - center.amap.com
+      - amap-aos-info-nogw.amap.com
+      - ai.amap.com
+      - api.coolapk.com
+      - 117.51.168.*
+      - 113.46.225.*
+      - common.diditaxi.com.cn
+      - freight.xiaojukeji.com
+      - daijia.kuaidadi.com
+      - 162.14.157.*
+      - ct.xiaojukeji.com
+      - res.xiaojukeji.com
+      - conf.diditaxi.com.cn
+      - api.udache.com
+      - 123.207.209.*
+      - 112.53.55.225
+      - 120.241.142.*
+      - 120.241.143.*
+      - 116.85.*
+      - 139.199.240.84
+      - mapi.xiaojukeji.com
+      - manhattan.webapp.xiaojukeji.com
+      - ddpay.xiaojukeji.com
+      - acs.m.goofish.com
+      - g-acs.m.goofish.com
+      - api.pinduoduo.com
+      - m.pinduoduo.net
+      - gql.reddit.com
+      - gql-fed.reddit.com
+      - api.weibo.cn
+      - weibointl.api.weibo.cn
+      - ci.xiaohongshu.com
+      - edith.xiaohongshu.com
+      - rec.xiaohongshu.com
+      - so.xiaohongshu.com
+      - www.xiaohongshu.com

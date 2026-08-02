@@ -52,7 +52,28 @@ AND,((DOMAIN,api.example.com),(PROTOCOL,QUIC)),REJECT
   assert.equal(result.warnings.length, 0);
   assert.deepEqual(result.document.rules[0].and.match, [
     { domain: { match: "api.example.com" } },
-    { protocol: { match: "QUIC" } }
+    { protocol: { match: "quic" } }
   ]);
   assert.equal(result.document.url_rewrites[0].location, "http://reject-img/");
+});
+
+test("converts module arguments and ordinary header rewrites", () => {
+  const input = `#!name=X
+#!arguments=MODE:"on",VALUE:"a, b"
+#!arguments-desc=first\\nsecond
+[Header Rewrite]
+http-request ^https:\\/\\/example\\.com header-del X-Old
+http-request ^https:\\/\\/example\\.com header-add X-New "a, b"
+`;
+  const result = convertSurgeModule(input);
+  assert.equal(result.warnings.length, 0);
+  assert.deepEqual(result.document.compat_arguments, { MODE: "on", VALUE: "a, b" });
+  assert.equal(result.document.compat_arguments_desc, "first\nsecond");
+  assert.equal(result.document.header_rewrites[0].delete.type, "request");
+  assert.equal(result.document.header_rewrites[1].add.value, "a, b");
+});
+
+test("warns about unsupported active sections", () => {
+  const result = convertSurgeModule("#!name=X\n[General]\nforce-http-engine-hosts = %APPEND% example.com");
+  assert.deepEqual(result.warnings, ["未转换区段 [general]"]);
 });

@@ -1,0 +1,60 @@
+name: GoofishAds
+description: GoofishAds
+rules:
+  - domain_suffix:
+      match: iyes.youku.com
+      policy: REJECT
+body_rewrites:
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idle.user.strategy.list
+      filter: .data.strategies = [{}]
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idlehome.home.circle.list
+      filter: .data.circleList |= map(select(.bizCode != "saveMoney"))
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idlehome.home.nextfresh
+      filter: .data.homeTopList |= [ .[0] ] | .data.sections |= map(select(.data.bizType == "item"))
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idlemtopsearch.search.shade
+      filter: .data.singleShadeWords =[{}]
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idlemtopsearch.item.search.activate
+      filter: .data.cardList = [{}]
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idlemtopsearch.search.discover
+      filter: del(.data.resultList)
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.idle.user.page.my.adapter
+      filter: .data.ability=[] | .data.container.sections |= map(select(.sectionBizCode | test("head|user|trade")))
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idle.item.buy.feeds
+      filter: del(.data.sections)
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idle.local.home
+      filter: .data.sections |= map(select(.data.bizType == "item"))
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idlemtopsearch.search
+      filter: .data.resultList |= map(select(.data.item.main.clickParam.args.biz_type == "item"))
+  - response_jq:
+      match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.taobao.idle.item.recommend
+      filter: .data.cardList |= map(select(.cardData.bizType != "mamaAD"))
+map_locals:
+  - match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.*splash\.ads
+    status_code: 200
+    body: " "
+  - match: ^https?:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop.idle.ad.expose
+    status_code: 200
+    body: " "
+scriptings:
+  - http_response:
+      name: amdc
+      match: ^http:\/\/[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){1,4}(:\d+)?\/amdc\/mobileDispatch
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/ad/goofish-ads/amdc.js
+      max_size: -1
+      timeout: 60
+      body_required: true
+mitm:
+  hostnames:
+    includes:
+      - acs.m.goofish.com
+      - g-acs.m.goofish.com

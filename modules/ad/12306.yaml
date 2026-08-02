@@ -1,0 +1,20 @@
+name: 12306 去广告
+description: 移除 12306 广告接口返回内容
+author: "@ddgksf2013"
+rules:
+  - domain:
+      match: ad.12306.cn
+      policy: DIRECT
+scriptings:
+  - http_request:
+      name: "12306"
+      match: ^https?:\/\/ad\.12306\.cn\/ad\/ser\/getAdList
+      script_url: https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/scripts/ad/12306/12306.js
+      max_size: -1
+      timeout: 60
+      body_required: true
+mitm:
+  hostnames:
+    includes:
+      - ad.12306.cn
+homepage: https://github.com/AWelook/Egern-Modules-Optimized

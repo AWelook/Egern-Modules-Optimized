@@ -38,7 +38,7 @@ for (let index = 0; index < scriptUrls.length; index += 1) {
   await writeFile(path.join(upstreamDir, fileName), raw);
   const publishedPath = `scripts/${category}/${slug}/${fileName}`;
   scriptUrlMap.set(url, `https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/${publishedPath}`);
-  scriptRecords.push({ upstream_url: url, upstream_path: `upstream/${category}/${slug}/${fileName}`, published_path: publishedPath, sha256: sha256(raw) });
+  scriptRecords.push({ upstream_url: url, upstream_path: `upstream/${category}/${slug}/${fileName}`, published_path: publishedPath, runtime: "egern-native", sha256: sha256(raw) });
 }
 
 let convertedYaml;

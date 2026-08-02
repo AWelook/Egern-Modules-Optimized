@@ -47,7 +47,8 @@ function convertCondition(value) {
   const fields = splitCommaFields(unwrapParentheses(value));
   const type = ruleTypes.get(fields[0]?.toUpperCase());
   if (!type || fields.length < 2) return null;
-  const condition = { [type]: { match: unquote(fields[1]) } };
+  const rawMatch = unquote(fields[1]);
+  const condition = { [type]: { match: type === "protocol" ? rawMatch.toLowerCase() : rawMatch } };
   if (["ip_cidr", "ip_cidr6", "geoip"].includes(type) && fields.slice(2).some((item) => item.toLowerCase() === "no-resolve")) {
     condition[type].no_resolve = true;
   }
@@ -88,7 +89,8 @@ function convertRules(lines, output, warnings) {
       warnings.push(`未转换 Rule: ${line}`);
       continue;
     }
-    const match = unquote(fields[0]);
+    const rawMatch = unquote(fields[0]);
+    const match = type === "protocol" ? rawMatch.toLowerCase() : rawMatch;
     const policy = unquote(fields[1]);
     const body = { match, policy };
     if (["ip_cidr", "ip_cidr6", "geoip"].includes(type) && fields.slice(2).some((item) => item.toLowerCase() === "no-resolve")) {
@@ -131,6 +133,32 @@ function convertBodyRewrites(lines, output, warnings) {
     if (!parsed) { warnings.push(`未转换 Body Rewrite: ${line}`); continue; }
     add(output, "body_rewrites", { [parsed.type]: { match: parsed.match, filter: parsed.filter } });
   }
+}
+
+function convertHeaderRewrites(lines, output, warnings) {
+  for (const line of activeLines(lines)) {
+    const tokens = tokenizeOptions(line).map(unquote);
+    if (tokens.length < 4 || !["http-request", "http-response"].includes(tokens[0])) {
+      warnings.push(`未转换 Header Rewrite: ${line}`);
+      continue;
+    }
+    const type = tokens[0] === "http-request" ? "request" : "response";
+    const [pattern, action, name, value] = tokens.slice(1);
+    if (action === "header-del" && tokens.length === 4) {
+      add(output, "header_rewrites", { delete: { match: pattern, name, type } });
+    } else if ((action === "header-add" || action === "header-replace") && value !== undefined) {
+      add(output, "header_rewrites", { [action === "header-add" ? "add" : "replace"]: { match: pattern, name, value, type } });
+    } else warnings.push(`未转换 Header Rewrite: ${line}`);
+  }
+}
+
+function parseCompatArguments(value) {
+  const result = {};
+  for (const field of splitCommaFields(value)) {
+    const separator = field.indexOf(":");
+    if (separator > 0) result[field.slice(0, separator).trim()] = unquote(field.slice(separator + 1).trim());
+  }
+  return result;
 }
 
 function parseKeyValues(value) {
@@ -237,12 +265,19 @@ export function convertSurgeModule(source, options = {}) {
   if (metadata.homepage) output.homepage = metadata.homepage;
   if (metadata.icon) output.icon = metadata.icon;
   if (metadata.openurl) output.open_url = metadata.openurl;
+  if (metadata.arguments) output.compat_arguments = parseCompatArguments(metadata.arguments);
+  if (metadata["arguments-desc"]) output.compat_arguments_desc = metadata["arguments-desc"].replaceAll("\\n", "\n");
   convertRules(sections.get("rule"), output, warnings);
   convertUrlRewrites(sections.get("url rewrite"), output, warnings);
+  convertHeaderRewrites(sections.get("header rewrite"), output, warnings);
   convertBodyRewrites(sections.get("body rewrite"), output, warnings);
   convertMapLocals(sections.get("map local"), output, warnings);
   convertScripts(sections.get("script"), output, warnings, options.scriptUrlMap ?? new Map());
   convertMitm(sections.get("mitm"), output);
+  const supportedSections = new Set(["metadata", "rule", "url rewrite", "header rewrite", "body rewrite", "map local", "script", "mitm"]);
+  for (const [name, lines] of sections) {
+    if (!supportedSections.has(name) && activeLines(lines).length) warnings.push(`未转换区段 [${name}]`);
+  }
   if (!Object.keys(output).length) throw new Error("未识别到可转换的 Surge 模块内容");
   return { document: output, yaml: YAML.stringify(output, { lineWidth: 0 }), warnings };
 }

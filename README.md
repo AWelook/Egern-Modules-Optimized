@@ -37,6 +37,23 @@ Egern 安装地址格式：
 egern:/modules/new?url=https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/modules/ad/example.yaml
 ```
 
+## 已发布模块
+
+| 模块 | 文件 |
+| --- | --- |
+| 12306 | `modules/ad/12306.yaml` |
+| 高德地图 | `modules/ad/amap-ads.yaml` |
+| 酷安 | `modules/ad/coolapk-ads.yaml` |
+| 滴滴出行 | `modules/ad/didichuxing.yaml` |
+| 闲鱼 | `modules/ad/goofish-ads.yaml` |
+| 拼多多 | `modules/ad/pinduoduo-ads.yaml` |
+| Reddit | `modules/ad/reddit-ads.yaml` |
+| 微博轻享版 | `modules/ad/weibo-intl-ads.yaml` |
+| 小红书 | `modules/ad/xiaohongshu-ads.yaml` |
+| 去广告合集 | `modules/ad/ad-combined.yaml` |
+
+合集成员与 Surge 仓库一致，不含 Spotify 和网易云。不要同时启用合集与其中的单独模块。
+
 ## 优化边界
 
 - 不改变匹配范围、参数控制、响应结构、失败语义和脚本覆盖。

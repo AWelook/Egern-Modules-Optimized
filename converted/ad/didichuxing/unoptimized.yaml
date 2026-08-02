@@ -1,0 +1,172 @@
+name: 滴滴出行
+description: Didichuxing
+author: 怎么肥事
+rules:
+  - domain:
+      match: gwp.xiaojukeji.com
+      policy: REJECT
+  - ip_cidr:
+      match: 139.199.244.6/32
+      policy: REJECT
+  - ip_cidr:
+      match: 113.46.225.9/32
+      policy: REJECT
+  - ip_cidr:
+      match: 139.199.244.7/32
+      policy: REJECT
+  - ip_cidr:
+      match: 113.46.225.8/32
+      policy: REJECT
+  - ip_cidr:
+      match: 123.207.209.39/32
+      policy: REJECT
+  - ip_cidr:
+      match: 123.207.209.60/32
+      policy: REJECT
+  - ip_cidr:
+      match: 139.199.240.15/32
+      policy: REJECT
+  - ip_cidr:
+      match: 139.199.240.12/32
+      policy: REJECT
+  - ip_cidr:
+      match: 116.85.3.37/32
+      policy: REJECT
+  - ip_cidr:
+      match: 162.14.157.2/32
+      policy: REJECT
+  - ip_cidr:
+      match: 162.14.157.24/32
+      policy: REJECT
+  - ip_cidr:
+      match: 116.85.1.0/32
+      policy: REJECT
+  - ip_cidr:
+      match: 116.85.1.17/32
+      policy: REJECT
+  - ip_cidr:
+      match: 116.85.1.22/32
+      policy: REJECT
+  - ip_cidr:
+      match: 116.85.3.25/32
+      policy: REJECT
+body_rewrites:
+  - response_jq:
+      match: ^https:\/\/common\.diditaxi\.com\.cn\/common\/v[5-9]\/usercenter\/layout
+      filter: .data.layout.order |= map(select(. == "center_base_info_card" or . == "center_order_related_card" or . == "center_wallet_finance_card")) | (.data.instances.center_wallet_finance_card.data.view_info |= map(select(.title == "优惠卡券"))) | del(.data.instances.center_marketing_card, .data.instances.center_member_card, .data.instances.center_tool_card, .data.instances.center_widget_list)
+  - response_jq:
+      match: ^https:\/\/common\.diditaxi\.com\.cn\/common\/v\d\/usercenter\/me
+      filter: .data.cards |= (map(select(.title != "天天领福利" and .title != "金融服务" and .title != "更多服务" and .title != "企业服务" and .title != "安全中心")) | map(if .tag == "wallet" then (.items |= map(select(.title == "优惠券"))) | (if .card_type == 4 then .bottom_items |= map(select(.title == "省钱套餐" or .title == "出行里程")) else . end) else . end))
+  - response_jq:
+      match: ^https:\/\/conf\.diditaxi\.com\.cn\/homepage\/v\d\/core
+      filter: .data.order_cards.nav_list_card.data |= map(select(.nav_id == "dache_anycar" or .nav_id == "driverservice" or .nav_id == "bike" or .nav_id == "carmate" or .nav_id == "nav_more_v3")) | .data.disorder_cards.bottom_nav_list.data |= map(select(.id == "v6x_home" or .id == "home_page" or .id == "user_center")) | .data.disorder_cards.top_nav_list.data.top_nav_info |= map(select(.name != "旅行" and .name != "车主"))
+  - response_jq:
+      match: ^https:\/\/api\.udache\.com\/gulfstream\/pre-sale\/v1\/other\/pGetSceneList
+      filter: .data.scene_list |= map(select(.text != "优惠商城")) | .data.show_data |= map(.scene_ids |= map(select(. != "scene_coupon_mall")))
+  - response_jq:
+      match: ^https:\/\/conf\.diditaxi\.com\.cn\/homepage\/v1\/oversea\/layout
+      filter: del(.data.instances.oversea_main_banner)
+  - response_jq:
+      match: ^https:\/\/api\.udache\.com\/gulfstream\/porsche\/v1\/dache_homepage_layout
+      filter: del(.data.instances["xp-card-01"])
+  - response_jq:
+      match: ^https:\/\/api\.udache\.com\/gulfstream\/passenger-center\/v2\/other\/pInTripLayout
+      filter: del(.data.order_components[8].data) | .data.order_components |= map(select(.name != "passenger_common_casper"))
+  - response_jq:
+      match: ^https:\/\/mapi\.xiaojukeji\.com\/passenger-wallet\/api\/v[\d.]+\/wallet\/homepage
+      filter: .data.cardList |= (map(if .mcode == "index_assets_v6" then .detailData |= (del(.myCreditLimit) | .discountList |= .[:3] | del(.noticeList)) else . end) | map(select(.mcode == "index_assets_v6")))
+  - response_jq:
+      match: ^https:\/\/manhattan\.webapp\.xiaojukeji\.com\/zootopia\/api\/my-assets\/get-assets-data
+      filter: del(.data.myQuotaModularRes, .data.assetsData.myQuotaModularRes, .data.banner, .data.assetsData.banner, .data.myGuaranteeModularRes, .data.assetsData.myGuaranteeModularRes)
+  - response_jq:
+      match: ^https:\/\/manhattan\.webapp\.xiaojukeji\.com\/zootopia\/api\/my-assets\/module-is-show
+      filter: .data = []
+  - response_jq:
+      match: ^https:\/\/ddpay\.xiaojukeji\.com\/ddpay\/api\/manhattan-small-change\/get-all-config
+      filter: .data.result = []
+  - response_jq:
+      match: ^https:\/\/ddpay\.xiaojukeji\.com\/ddpay\/api\/manhattan-small-change\/get-apollo-config
+      filter: .data.result.hideList = []
+map_locals:
+  - match: ^https:\/\/res\.xiaojukeji\.com\/resapi\/activity\/getMulti\?
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/res\.xiaojukeji\.com\/resapi\/activity\/xpget
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/ct\.xiaojukeji\.com\/agent\/v3\/feeds
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/freight\.xiaojukeji\.com\/gateway
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/daijia\.kuaidadi\.com:443\/gateway
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/res\.xiaojukeji\.com\/resapi\/activity\/mget
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/conf\.diditaxi\.com\.cn\/homepage\/v\d\/other\/fast
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/conf\.diditaxi\.com\.cn\/homepage\/v\d\/other\/slow
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/conf\.diditaxi\.com\.cn\/dynamic\/conf
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/api\.udache\.com\/gulfstream\/watson\/v1\/bubble\/getBubble
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/res\.xiaojukeji\.com\/resapi\/activity\/getInsActivityV2
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+  - match: ^https:\/\/conf\.diditaxi\.com\.cn\/ota\/na\/yuantu\/infoList
+    status_code: 200
+    body: "{}"
+    headers:
+      Content-Type: application/json
+mitm:
+  hostnames:
+    includes:
+      - 117.51.168.*
+      - 113.46.225.*
+      - common.diditaxi.com.cn
+      - freight.xiaojukeji.com
+      - daijia.kuaidadi.com
+      - 162.14.157.*
+      - ct.xiaojukeji.com
+      - res.xiaojukeji.com
+      - conf.diditaxi.com.cn
+      - api.udache.com
+      - 123.207.209.*
+      - 112.53.55.225
+      - 120.241.142.*
+      - 120.241.143.*
+      - 116.85.*
+      - 139.199.240.84
+      - mapi.xiaojukeji.com
+      - manhattan.webapp.xiaojukeji.com
+      - ddpay.xiaojukeji.com

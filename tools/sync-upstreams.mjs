@@ -8,9 +8,10 @@ const registry = JSON.parse(await readFile(registryPath, "utf8"));
 const changed = [];
 for (const item of registry) {
   const sources = [
-    { kind: "module", url: item.upstream_url, file: item.upstream_path, hashKey: "upstream_sha256" },
+    ...(item.upstream_url ? [{ kind: "module", url: item.upstream_url, file: item.upstream_path, hashKey: "upstream_sha256" }] : []),
     ...(item.normalization_url ? [{ kind: "normalization", url: item.normalization_url, file: item.normalization_path, hashKey: "normalization_sha256" }] : []),
-    ...(item.scripts ?? []).map((script) => ({ kind: "script", url: script.upstream_url, file: script.upstream_path, record: script }))
+    ...(item.scripts ?? []).filter((script) => script.upstream_url).map((script) => ({ kind: "script", url: script.upstream_url, file: script.upstream_path, record: script })),
+    ...(item.dependencies ?? []).filter((dependency) => dependency.upstream_url).map((dependency) => ({ kind: "dependency", url: dependency.upstream_url, file: dependency.upstream_path, record: dependency }))
   ];
   for (const source of sources) {
     const text = await fetchText(source.url);

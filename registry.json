@@ -1,1 +1,217 @@
-[]
+[
+  {
+    "slug": "12306",
+    "category": "ad",
+    "upstream_url": "https://raw.githubusercontent.com/ddgksf2013/Scripts/master/12306.js",
+    "upstream_path": "upstream/ad/12306/12306.js",
+    "normalization_url": null,
+    "normalization_path": "upstream/ad/12306/script-hub.sgmodule",
+    "converted_path": "converted/ad/12306/unoptimized.yaml",
+    "published_path": "modules/ad/12306.yaml",
+    "scripts": [
+      {
+        "upstream_url": "https://github.com/ddgksf2013/Scripts/raw/master/12306.js",
+        "upstream_path": "upstream/ad/12306/12306.js",
+        "published_path": "scripts/ad/12306/12306.js",
+        "runtime": "egern-native",
+        "sha256": "4723bc2236835eea0a8b79529c832a9af1cfd37fa1b160becb3a4b51f9067cd5"
+      }
+    ],
+    "dependencies": [],
+    "status": "published",
+    "upstream_sha256": "4723bc2236835eea0a8b79529c832a9af1cfd37fa1b160becb3a4b51f9067cd5",
+    "warnings": [],
+    "conversion_notes": []
+  },
+  {
+    "slug": "amap-ads",
+    "category": "ad",
+    "upstream_url": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/AdBlock/AmapAds.conf",
+    "upstream_path": "upstream/ad/amap-ads/module.conf",
+    "normalization_url": null,
+    "normalization_path": "upstream/ad/amap-ads/script-hub.sgmodule",
+    "converted_path": "converted/ad/amap-ads/unoptimized.yaml",
+    "published_path": "modules/ad/amap-ads.yaml",
+    "scripts": [
+      {
+        "upstream_url": "https://raw.githubusercontent.com/ddgksf2013/Scripts/refs/heads/master/amdc.js",
+        "upstream_path": "upstream/ad/amap-ads/amdc.js",
+        "published_path": "scripts/ad/amap-ads/amdc.js",
+        "runtime": "egern-native",
+        "sha256": "8217f2150f8d12ae04d2c49b5da0a838e83f4de68b34df71c2da16cc1267898f"
+      },
+      {
+        "upstream_url": "https://raw.githubusercontent.com/ddgksf2013/Scripts/refs/heads/master/amap.js",
+        "upstream_path": "upstream/ad/amap-ads/amap.js",
+        "published_path": "scripts/ad/amap-ads/amap.js",
+        "runtime": "egern-native",
+        "sha256": "936aaaf97cf69b8a5a25ba49303c0470a16ac48851e8bf58080ff9f129ff7c48"
+      }
+    ],
+    "dependencies": [],
+    "status": "published",
+    "upstream_sha256": "d0c1caf909e3e9151ec890eb31bc14dc28b34c49d6c8a1ef42c147cd949564b3",
+    "warnings": [],
+    "conversion_notes": [
+      "AMDC 原生脚本不读取上游响应体，已关闭 body_required 并移除无效的无限正文上限"
+    ]
+  },
+  {
+    "slug": "coolapk-ads",
+    "category": "ad",
+    "upstream_url": "https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/Beta/%E9%85%B7%E5%AE%89%E5%8E%BB%E5%B9%BF%E5%91%8A.beta.sgmodule",
+    "upstream_path": "upstream/ad/coolapk-ads/module.sgmodule",
+    "normalization_url": null,
+    "normalization_path": null,
+    "converted_path": "converted/ad/coolapk-ads/unoptimized.yaml",
+    "published_path": "modules/ad/coolapk-ads.yaml",
+    "scripts": [],
+    "dependencies": [],
+    "status": "published",
+    "upstream_sha256": "67c568dd277be9d36825a72c0e5a45fc2e7cb386a7768e7557f2e0c0e898c107",
+    "warnings": [],
+    "conversion_notes": []
+  },
+  {
+    "slug": "didichuxing",
+    "category": "ad",
+    "upstream_url": "https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Didichuxing.snippet",
+    "upstream_path": "upstream/ad/didichuxing/module.snippet",
+    "normalization_url": null,
+    "normalization_path": "upstream/ad/didichuxing/script-hub.sgmodule",
+    "converted_path": "converted/ad/didichuxing/unoptimized.yaml",
+    "published_path": "modules/ad/didichuxing.yaml",
+    "scripts": [],
+    "dependencies": [],
+    "status": "published",
+    "upstream_sha256": "6fb275fdac5599c88c1bda47ee7f43dab25429fc1a9678b4013835436b1d2a40",
+    "warnings": [],
+    "conversion_notes": []
+  },
+  {
+    "slug": "goofish-ads",
+    "category": "ad",
+    "upstream_url": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/refs/heads/master/AdBlock/GoofishAds.conf",
+    "upstream_path": "upstream/ad/goofish-ads/module.conf",
+    "normalization_url": null,
+    "normalization_path": "upstream/ad/goofish-ads/script-hub.sgmodule",
+    "converted_path": "converted/ad/goofish-ads/unoptimized.yaml",
+    "published_path": "modules/ad/goofish-ads.yaml",
+    "scripts": [
+      {
+        "upstream_url": "https://raw.githubusercontent.com/ddgksf2013/Scripts/refs/heads/master/amdc.js",
+        "upstream_path": "upstream/ad/goofish-ads/amdc.js",
+        "published_path": "scripts/ad/goofish-ads/amdc.js",
+        "runtime": "egern-native",
+        "sha256": "8217f2150f8d12ae04d2c49b5da0a838e83f4de68b34df71c2da16cc1267898f"
+      }
+    ],
+    "dependencies": [],
+    "status": "published",
+    "upstream_sha256": "6112a98d133ccd602b6906e05c811f402ee1902a15b56397db9ebdde8d4321d1",
+    "warnings": [],
+    "conversion_notes": [
+      "AMDC 原生脚本不读取上游响应体，已关闭 body_required 并移除无效的无限正文上限"
+    ]
+  },
+  {
+    "slug": "pinduoduo-ads",
+    "category": "ad",
+    "upstream_url": "https://kelee.one/Tool/Loon/Lpx/PinDuoDuo_remove_ads.lpx",
+    "upstream_path": "upstream/ad/pinduoduo-ads/module.lpx",
+    "normalization_url": null,
+    "normalization_path": "upstream/ad/pinduoduo-ads/script-hub.sgmodule",
+    "converted_path": "converted/ad/pinduoduo-ads/unoptimized.yaml",
+    "published_path": "modules/ad/pinduoduo-ads.yaml",
+    "scripts": [
+      {
+        "upstream_url": "https://kelee.one/Resource/JavaScript/PinDuoDuo/PinDuoDuo_remove_ads.js",
+        "upstream_path": "upstream/ad/pinduoduo-ads/PinDuoDuo_remove_ads.js",
+        "published_path": "scripts/ad/pinduoduo-ads/PinDuoDuo_remove_ads.js",
+        "runtime": "egern-native",
+        "sha256": "63af2e44da24da11f5c1bc930aefdcef2ce16aa65293be3e80ba8520d46e9c58"
+      }
+    ],
+    "dependencies": [
+      {
+        "upstream_url": "https://kelee.one/Resource/JavaScript/PinDuoDuo/9410-b8806e870a26db7d.js",
+        "upstream_path": "upstream/ad/pinduoduo-ads/9410-b8806e870a26db7d.js",
+        "published_path": "scripts/ad/pinduoduo-ads/9410-b8806e870a26db7d.js",
+        "runtime": "web-asset",
+        "sha256": "e8e4f0e81525d314a7bc6af0fa45600b7d49b098f71f53ab36155d9ebd327ba7"
+      }
+    ],
+    "status": "published",
+    "upstream_sha256": "be800887ae2009e4121a9adf465ca87ac3aa0f0d7e1c9e5786009c3584d44f7e",
+    "warnings": [],
+    "conversion_notes": []
+  },
+  {
+    "slug": "reddit-ads",
+    "category": "ad",
+    "upstream_url": "https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/Official/Reddit%20%E5%8E%BB%E5%B9%BF%E5%91%8A.sgmodule",
+    "upstream_path": "upstream/ad/reddit-ads/module.sgmodule",
+    "normalization_url": null,
+    "normalization_path": null,
+    "converted_path": "converted/ad/reddit-ads/unoptimized.yaml",
+    "published_path": "modules/ad/reddit-ads.yaml",
+    "scripts": [
+      {
+        "upstream_url": null,
+        "upstream_path": null,
+        "published_path": "scripts/ad/reddit-ads/translation.js",
+        "runtime": "egern-native",
+        "generated": true,
+        "sha256": null
+      }
+    ],
+    "dependencies": [],
+    "status": "published",
+    "upstream_sha256": "c252178c26d74b4af7bbe59f25b0a023e65a1e287c9649cfd88c6aae197cd78b",
+    "warnings": [],
+    "conversion_notes": [
+      "[General] 为 Surge HTTP 引擎开关，Egern 原生重写不需要该开关",
+      "两个参数化 Header Rewrite 已迁移为 Egern 原生请求脚本"
+    ]
+  },
+  {
+    "slug": "weibo-intl-ads",
+    "category": "ad",
+    "upstream_url": "https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/Beta/%E5%BE%AE%E5%8D%9A%E5%9B%BD%E9%99%85%E7%89%88%E5%8E%BB%E5%B9%BF%E5%91%8A.beta.sgmodule",
+    "upstream_path": "upstream/ad/weibo-intl-ads/module.sgmodule",
+    "normalization_url": null,
+    "normalization_path": null,
+    "converted_path": "converted/ad/weibo-intl-ads/unoptimized.yaml",
+    "published_path": "modules/ad/weibo-intl-ads.yaml",
+    "scripts": [],
+    "dependencies": [],
+    "status": "published",
+    "upstream_sha256": "b6a993b73118a0f91d5860a4edad7659caab83dbfd606d809308933ed7f73495",
+    "warnings": [],
+    "conversion_notes": []
+  },
+  {
+    "slug": "xiaohongshu-ads",
+    "category": "ad",
+    "upstream_url": "https://raw.githubusercontent.com/QingRex/LoonKissSurge/refs/heads/main/Surge/Beta/%E5%B0%8F%E7%BA%A2%E4%B9%A6%E5%8E%BB%E5%B9%BF%E5%91%8A.beta.sgmodule",
+    "upstream_path": "upstream/ad/xiaohongshu-ads/module.sgmodule",
+    "normalization_url": null,
+    "normalization_path": null,
+    "converted_path": "converted/ad/xiaohongshu-ads/unoptimized.yaml",
+    "published_path": "modules/ad/xiaohongshu-ads.yaml",
+    "scripts": [
+      {
+        "upstream_url": "https://kelee.one/Resource/JavaScript/RedPaper/RedPaper_remove_ads.js",
+        "upstream_path": "upstream/ad/xiaohongshu-ads/RedPaper_remove_ads.js",
+        "published_path": "scripts/ad/xiaohongshu-ads/RedPaper_remove_ads.js",
+        "runtime": "egern-native",
+        "sha256": "f7b637c9c738b18f72dd61824e25b06dad7d55553de204daad0dddd675a74f0c"
+      }
+    ],
+    "dependencies": [],
+    "status": "published",
+    "upstream_sha256": "10d5def71188af07d745ce5a84b81ff5d77d7ead67258653611f9f1d228b92c8",
+    "warnings": [],
+    "conversion_notes": []
+  }
+]

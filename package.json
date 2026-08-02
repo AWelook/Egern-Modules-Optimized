@@ -4,10 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build:combined": "node tools/build-combined-module.mjs",
+    "check:combined": "node tools/build-combined-module.mjs --check",
     "import": "node tools/import-module.mjs",
+    "migrate:surge": "node tools/migrate-surge-optimized.mjs",
     "sync": "node tools/sync-upstreams.mjs",
     "validate": "node tools/validate.mjs",
-    "test": "node --test && npm run validate"
+    "test": "node --test && npm run check:combined && npm run validate"
   },
   "dependencies": {
     "yaml": "^2.8.1"
