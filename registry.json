@@ -276,7 +276,7 @@
         "upstream_path": "upstream/tools/wloc/wloc.js",
         "published_path": "scripts/tools/wloc/wloc.js",
         "runtime": "egern-native",
-        "sha256": "d385c624efd59bdd2cff56bf819a770b40c4abf0f970818877f1dca4174f256a",
+        "sha256": "a1b361e60f0b434585260fb59c65d1ddbe3bff89ace3639f592e7d8af432b3c1",
         "published_sha256": "4fd506b317e3d476871e7a19e84e559a4508fe0da53720f01b82931c03b39f7c"
       },
       {
@@ -284,12 +284,12 @@
         "upstream_path": "upstream/tools/wloc/wloc-settings.js",
         "published_path": "scripts/tools/wloc/wloc-settings.js",
         "runtime": "egern-native",
-        "sha256": "b4e9d69e69c703b3fab485a559825aaedc9e3a1fd9c06e81cb35d10bbdcd13d2",
+        "sha256": "cbff047a7f42055615ee19e208ddfc2ec66833e6f2b75555eac84f1c299a66cf",
         "published_sha256": "c5cc8599932ddd2c291ce87778cf4199d94f92082b295c36d2ad637353c40cfa"
       }
     ],
-    "status": "published",
-    "upstream_sha256": "5d6b82c31316f4a7be65e3b8d2335f4338e01af98e262948118eefe63abf7034",
+    "status": "upstream-update",
+    "upstream_sha256": "359499a9d1fa1e8595e1c98a4a2c64a8553b2ea473a203879974efe5db353494",
     "warnings": [],
     "conversion_notes": [
       "未经优化的转换快照通过 env._compat.$argument 保留 Surge 脚本参数",
