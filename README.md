@@ -22,7 +22,7 @@ egern:/modules/new?url=https://raw.githubusercontent.com/AWelook/Egern-Modules-O
 
 | 模块 | 安装文件 | 说明 |
 | --- | --- | --- |
-| 去广告合集 | [Raw](https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/modules/ad/ad-combined.yaml) | 包含下方九个去广告单独模块 |
+| 去广告合集 | [Raw](https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/modules/ad/ad-combined.yaml) | 包含下方八个去广告单独模块，不含拼多多 |
 | 12306 | [Raw](https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/modules/ad/12306.yaml) | 单独版 |
 | 高德地图 | [Raw](https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/modules/ad/amap-ads.yaml) | 单独版 |
 | 酷安 | [Raw](https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/modules/ad/coolapk-ads.yaml) | 单独版 |
@@ -35,7 +35,7 @@ egern:/modules/new?url=https://raw.githubusercontent.com/AWelook/Egern-Modules-O
 | 网易云音乐 | [Raw](https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/modules/music/netease.yaml) | 独立音乐模块，不在去广告合集中 |
 | Apple WLOC 定位修改 | [Raw](https://raw.githubusercontent.com/AWelook/Egern-Modules-Optimized/main/modules/tools/wloc.yaml) | Egern 原生参数、存储和二进制脚本 |
 
-不要同时启用去广告合集与其中的单独模块，否则相同请求可能被重复匹配。合集不包含 Spotify 和网易云音乐。
+不要同时启用去广告合集与其中的单独模块，否则相同请求可能被重复匹配。合集不包含 Spotify、网易云音乐和拼多多；拼多多单独版仍可独立启用。
 
 ## 项目保证
 
