@@ -5,14 +5,13 @@ import path from "node:path";
 import YAML from "yaml";
 import { COMBINED_SOURCES, buildCombinedModule } from "../tools/build-combined-module.mjs";
 
-test("combined module uses the same nine members as Surge", () => {
+test("combined module uses the configured eight members", () => {
   assert.deepEqual(COMBINED_SOURCES.map(([slug]) => slug), [
     "12306",
     "amap-ads",
     "coolapk-ads",
     "didichuxing",
     "goofish-ads",
-    "pinduoduo-ads",
     "reddit-ads",
     "weibo-intl-ads",
     "xiaohongshu-ads",

@@ -9,7 +9,6 @@ export const COMBINED_SOURCES = [
   ["coolapk-ads", "酷安"],
   ["didichuxing", "滴滴出行"],
   ["goofish-ads", "闲鱼"],
-  ["pinduoduo-ads", "拼多多"],
   ["reddit-ads", "Reddit"],
   ["weibo-intl-ads", "微博轻享版"],
   ["xiaohongshu-ads", "小红书"],
@@ -28,7 +27,7 @@ export function buildCombinedModule(documents) {
   const output = {
     name: "去广告合集（不含 Spotify 与网易云）",
     description:
-      "合并 12306、高德地图、酷安、滴滴出行、闲鱼、拼多多、Reddit、微博轻享版和小红书去广告；请勿与对应单独版同时启用",
+      "合并 12306、高德地图、酷安、滴滴出行、闲鱼、Reddit、微博轻享版和小红书去广告；请勿与对应单独版同时启用",
     author: "原规则作者与 AWelook",
     homepage: "https://github.com/AWelook/Egern-Modules-Optimized",
   };
