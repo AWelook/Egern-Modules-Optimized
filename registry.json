@@ -152,8 +152,8 @@
         "published_sha256": "e8e4f0e81525d314a7bc6af0fa45600b7d49b098f71f53ab36155d9ebd327ba7"
       }
     ],
-    "status": "published",
-    "upstream_sha256": "be800887ae2009e4121a9adf465ca87ac3aa0f0d7e1c9e5786009c3584d44f7e",
+    "status": "upstream-update",
+    "upstream_sha256": "4461c71b66c8725dcb659ab013915a92d647481b891b7dadb3181ed6c954feb4",
     "warnings": [],
     "conversion_notes": [],
     "published_sha256": "50283f8050bfc73aa09600fca247bfdac59c2b5fb977bc2ffba2c72528afcffd"
