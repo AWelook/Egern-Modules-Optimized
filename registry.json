@@ -246,13 +246,13 @@
         "upstream_path": "upstream/music/netease/wyyad.js",
         "published_path": "scripts/music/netease/wyyad.js",
         "runtime": "egern-native",
-        "sha256": "7423635e7826d083bb41e147b921eb66c04ab538f01a123e82b6a18034c38571",
+        "sha256": "a903f5c79f69e2eb82428318f454c26d311c1d77cec13a9e827d3008119c14ce",
         "published_sha256": "ed28c0d9bc3bf0c902ef35136f23af2983ac2a0bd44929bd723b58c3553985c6"
       }
     ],
     "dependencies": [],
-    "status": "published",
-    "upstream_sha256": "1ab2d016ad51e9a995aadacde3c2502b110674bf10c9674896aab9f5df13ef40",
+    "status": "upstream-update",
+    "upstream_sha256": "69f5fe58fa513e842e6e6fc057d948511902a2968ed0d7c4dd9d146bda7a9532",
     "warnings": [],
     "conversion_notes": [
       "保留上游 REJECT-NO-DROP 策略，避免改变拒绝连接语义",
